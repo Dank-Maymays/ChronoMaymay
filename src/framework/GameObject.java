@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import org.newdawn.slick.opengl.Texture;
 
 public abstract class GameObject {
-	protected double x,y,xSpeed,ySpeed,width,height;
+	protected float x,y,xSpeed,ySpeed,width,height;
 	protected Texture texture;
 	protected Rectangle hitbox;
 	
@@ -15,51 +15,51 @@ public abstract class GameObject {
 	
 	public abstract void collision();
 
-	public double getX() {
+	public float getX() {
 		return x;
 	}
 
-	public void setX(double x) {
+	public void setX(float x) {
 		this.x = x;
 	}
 
-	public double getY() {
+	public float getY() {
 		return y;
 	}
 
-	public void setY(double y) {
+	public void setY(float y) {
 		this.y = y;
 	}
 
-	public double getxSpeed() {
+	public float getxSpeed() {
 		return xSpeed;
 	}
 
-	public void setxSpeed(double xSpeed) {
+	public void setxSpeed(float xSpeed) {
 		this.xSpeed = xSpeed;
 	}
 
-	public double getySpeed() {
+	public float getySpeed() {
 		return ySpeed;
 	}
 
-	public void setySpeed(double ySpeed) {
+	public void setySpeed(float ySpeed) {
 		this.ySpeed = ySpeed;
 	}
 
-	public double getWidth() {
+	public float getWidth() {
 		return width;
 	}
 
-	public void setWidth(double width) {
+	public void setWidth(float width) {
 		this.width = width;
 	}
 
-	public double getHeight() {
+	public float getHeight() {
 		return height;
 	}
 
-	public void setHeight(double height) {
+	public void setHeight(float height) {
 		this.height = height;
 	}
 
