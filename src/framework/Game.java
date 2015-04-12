@@ -14,11 +14,13 @@ import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
 import static org.lwjgl.opengl.GL11.glVertex2d;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
 import static framework.Draw.*;
 
 public class Game {
@@ -27,6 +29,12 @@ public class Game {
 	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	
 	public static void main(String[] args){
+		
+		if(System.getProperty("os.name").contains("Windows"))
+			System.setProperty("org.lwjgl.librarypath", new File("natives/windows").getAbsolutePath());
+		 else if (System.getProperty("os.name").contains("Mac"))
+			System.setProperty("org.lwjgl.librarypath", new File("natives/macosx").getAbsolutePath());
+		
 		
 		Setup();
 		

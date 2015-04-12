@@ -2,12 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="Jars/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="Jars/lwjgl.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="ChronoMaymay/Natives/windows"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="Jars/slick.jar"/>
+	<classpathentry kind="lib" path="jars/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="jars/lwjgl.jar"/>
+	<classpathentry kind="lib" path="jars/slick.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
