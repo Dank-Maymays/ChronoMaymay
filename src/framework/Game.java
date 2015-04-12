@@ -11,14 +11,15 @@ public class Game {
 	
 	public static void main(String[] args) throws Exception{
 		Display.setDisplayMode(new DisplayMode(1280,720));
+		Display.setTitle("Potato");
 		Display.create();
 		
 		alien = new Player();
-		
+		setCamera();
 		while(!Display.isCloseRequested()){
-			setCamera();
+			glClear(GL_COLOR_BUFFER_BIT);
 			drawBackground();
-			//alien.render();
+			alien.render();
 			//Draw.drawQuad(100, 100, 100, 100);
 			Display.update();
 			Display.sync(60);
@@ -28,15 +29,14 @@ public class Game {
 	
 	public static void setCamera(){
 		//Clear screen
-		glClear(GL_COLOR_BUFFER_BIT);
+
 		//Modify projection matrix
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glOrtho(0,1280,0,720,-1,1);
-		//glEnable(GL_TEXTURE_2D);
 		//Modify modelview matrix
 		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
+		glEnable(GL_TEXTURE_2D);
 		
 	}
 	

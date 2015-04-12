@@ -28,9 +28,10 @@ public class Draw {
 	public static void drawQuad(double x, double y, double width, double height, Texture texture)
 	{
 		glPushMatrix();
+		texture.bind();
 		glBegin(GL_QUADS);
 		
-		texture.bind();
+
 		glColor3d(0.5,0.5,0.5);
 		glTexCoord2d(0,0);
 		glVertex2d(x,y);
