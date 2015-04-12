@@ -47,6 +47,12 @@ public class Draw {
 		
 	}
 	
+	public static void Background()
+	{
+		drawQuad(WIDTH/10,HEIGHT/10,WIDTH/10*8,HEIGHT);
+		
+	}
+	
 	public static Texture quickTexture(String loc){
 		Texture tex = null;
 		
@@ -118,7 +124,8 @@ public class Draw {
 		try {
 			return TextureLoader.getTexture(type,new FileInputStream(new File(path)));
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("File not found");
+			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -12,11 +12,13 @@ public class Game {
 	public Game()
 	{
 		Setup();
-		Player p = new Player(0,0,64,64);
+		Player p = new Player(400,400,64,64);
 		while(!Display.isCloseRequested())
 		{
 			Time.update();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+			Background();
+			
 			p.tick();
 			p.render();
 			Display.update();
