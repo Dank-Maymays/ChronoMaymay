@@ -49,8 +49,9 @@ public class Draw {
 	
 	public static void Background()
 	{
+		glColor3f(0.3f,0.3f,0.3f);
 		drawQuad(WIDTH/10,HEIGHT/10,WIDTH/10*8,HEIGHT);
-		
+		glColor3d(1,1,1);
 	}
 	
 	public static Texture quickTexture(String loc){

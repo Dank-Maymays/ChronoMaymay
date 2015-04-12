@@ -2,25 +2,37 @@ package framework;
 
 import static framework.Draw.*;
 import static org.lwjgl.opengl.GL11.*;
+
+import java.util.ArrayList;
+
 import objects.Player;
+import objects.TestBlock;
 
 import org.lwjgl.opengl.Display;
 
 
 public class Game {
 	
+	public final static Time GAME_TIME = new Time();
+	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
+	
 	public Game()
 	{
 		Setup();
-		Player p = new Player(400,400,64,64);
+		for(int i = 0; i < WIDTH/64; i ++)
+			for(int j = 0; j < HEIGHT/64;j ++)
+				objects.add(new TestBlock(i*64,j*64,64,64));
+		
 		while(!Display.isCloseRequested())
 		{
-			Time.update();
+			GAME_TIME.update();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 			Background();
-			
-			p.tick();
-			p.render();
+			for(int i = 0; i < objects.size();i++)
+			{
+				objects.get(i).tick();
+				objects.get(i).render();
+			}
 			Display.update();
 			Display.sync(60);
 		}

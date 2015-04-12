@@ -4,24 +4,24 @@ import org.lwjgl.Sys;
 
 public class Time {
 
-	private static boolean paused = false;
-	public static long lastFrame, totalTime;
-	private static boolean firstUpdate = true;
-	public static float d = 0, multiplier = 1;
+	private boolean paused = false;
+	public long lastFrame, totalTime;
+	private boolean firstUpdate = true;
+	public float d = 0, multiplier = 1;
 	
-	public static long getTime()
+	public long getTime()
 	{
 		return Sys.getTime() * 1000 / Sys.getTimerResolution();
 	}
 	
-	public static float getDelta()
+	public float getDelta()
 	{
 		int delta = (int) (getTime() - lastFrame);
 		lastFrame = getTime();
 		return delta;
 	}
 	
-	public static float Delta()
+	public float Delta()
 	{
 		if (paused || firstUpdate)
 		{
@@ -31,30 +31,34 @@ public class Time {
 			return d * multiplier;
 	}
 	
-	public static float totalTime()
+	public long totalTime()
 	{
 		return totalTime;
 	}
 	
-	public static float multiplier()
+	public float multiplier()
 	{
 		return multiplier;
 	}
 	
-	public static void update()
+	public void update()
 	{
 		d = getDelta();
 		totalTime += d;
 	}
 	
-	public static void changeSpeed(int speed)
+	public void changeSpeed(int speed)
 	{
 		if(speed > -1 && speed < 5)
 			multiplier = speed;
 	}
 	
-	public static void pause()
+	public void pause()
 	{
 		paused = !paused;
+	}
+	
+	public long lastFrame(){
+		return lastFrame;
 	}
 }

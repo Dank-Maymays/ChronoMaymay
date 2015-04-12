@@ -1,6 +1,5 @@
 package framework;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.newdawn.slick.opengl.Texture;
@@ -10,15 +9,18 @@ import static framework.Draw.*;
 public class Animation {
 
 	private ArrayList<Texture> frames = new ArrayList<Texture>();
-	private int frame = 0;
+	private int fps, frame = 0;
+	private Time time = new Time();
 
-	public Animation(ArrayList<Texture> frames)
+	public Animation(ArrayList<Texture> frames, int fps)
 	{
 		this.frames = frames;
+		this.fps = fps;
 	}
 	
-	public Animation(String path)
+	public Animation(String path, int fps)
 	{
+		this.fps = fps;
 		int count = 1;
 		do
 		{
@@ -36,15 +38,31 @@ public class Animation {
 		} while(true);
 	}
 	
-	public Texture nextFrame()
+	public void update()
 	{
-		loopFrame();
-		return frames.get(frame++);
+
+		if(time.getTime() - time.lastFrame() >= 1000/fps)
+		{
+			nextFrame();
+			time.update();
+		}
 	}
-	public Texture lastFrame()
+	
+	public Texture getCurrentFrame()
 	{
+		return frames.get(frame);
+	}
+	
+	public void nextFrame()
+	{
+		frame++;
 		loopFrame();
-		return frames.get(frame--);
+	}
+	
+	public void lastFrame()
+	{
+		frame--;
+		loopFrame();
 	}
 	private void loopFrame()
 	{
