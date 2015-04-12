@@ -21,6 +21,16 @@ public class Draw {
 	
 	public static void Setup()
 	{
+		if(System.getProperty("os.name").contains("Windows"))
+			System.setProperty("org.lwjgl.librarypath", new File("natives/windows").getAbsolutePath());
+		else if(System.getProperty("os.name").contains("Mac"))
+			System.setProperty("org.lwjgl.librarypath", new File("natives/macosx").getAbsolutePath());
+		else
+		{
+			System.out.println("Your OS is not supported");
+			System.exit(0);
+		}
+		
 		Display.setTitle("Chrono MayMay");
 		try{
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
@@ -34,7 +44,7 @@ public class Draw {
 		glLoadIdentity();
 		glOrtho(0,WIDTH,HEIGHT,0,1,-1);
 		glMatrixMode(GL_MODELVIEW);
-		glEnable(GL_TEXTURE_2D);
+		
 	}
 	
 	public static Texture quickTexture(String loc){
@@ -53,6 +63,7 @@ public class Draw {
 	
 	public static void drawQuad(float x, float y, float width, float height)
 	{
+		glDisable(GL_TEXTURE_2D);
 		
 		glBegin(GL_QUADS);
 		
@@ -65,7 +76,8 @@ public class Draw {
 	}
 	
 	public static void drawQuad(float x, float y, float width, float height, Texture texture)
-	{				
+	{		
+		glEnable(GL_TEXTURE_2D);		
 		texture.bind();		
 		glTranslatef(x,y,0);
 		
@@ -80,13 +92,14 @@ public class Draw {
 		glTexCoord2f(0,1);
 		glVertex2f(0,height);
 		
-		glLoadIdentity();
-		
 		glEnd();
+		
+		glLoadIdentity();
 	}
 	
 	public static void drawQuad(float x, float y, float width, float height, float r, float g, float b)
 	{
+		glDisable(GL_TEXTURE_2D);
 		
 		glBegin(GL_QUADS);
 		
@@ -100,16 +113,21 @@ public class Draw {
 		glEnd();
 	}
 	
-	public Texture loadTexture(String loc) //returns null if texture is not found
+	public static Texture loadTexture(String path, String type) //returns null if texture is not found
 	{
 		try {
-			return TextureLoader.getTexture("PNG",new FileInputStream(new File(loc)));
+			return TextureLoader.getTexture(type,new FileInputStream(new File(path)));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static Texture quickLoad(String name)
+	{
+		return loadTexture("res/"+name+".png","png");
 	}
 	
 }

@@ -3,11 +3,23 @@ package framework;
 import java.awt.Rectangle;
 
 import org.newdawn.slick.opengl.Texture;
+import static framework.Draw.*;
 
 public abstract class GameObject {
 	protected float x,y,xSpeed,ySpeed,width,height;
 	protected Texture texture;
 	protected Rectangle hitbox;
+	protected ObjectID id;
+	
+	public GameObject(float x, float y, float width, float height, ObjectID id)
+	{
+		this.x = x;
+		this.y = y ;
+		this.width = width;
+		this.height = height;
+		this.id = id;
+		texture = quickLoad(id.texture);
+	}
 	
 	public abstract void tick();
 	

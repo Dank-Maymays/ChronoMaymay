@@ -18,7 +18,7 @@ public class Time {
 	{
 		int delta = (int) (getTime() - lastFrame);
 		lastFrame = getTime();
-		return delta * 0.01f;
+		return delta;
 	}
 	
 	public static float Delta()
