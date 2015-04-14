@@ -19,9 +19,9 @@ public class Game {
 	public Game()
 	{
 		Setup();
-		for(int i = 0; i < WIDTH/64; i ++)
-			for(int j = 0; j < HEIGHT/64;j ++)
-				objects.add(new TestBlock(i*64,j*64,64,64));
+		//for(int i = 0; i < WIDTH/64; i ++)
+			//for(int j = 0; j < HEIGHT/64;j ++)
+				objects.add(new Player(64,64,256,256));
 		
 		while(!Display.isCloseRequested())
 		{

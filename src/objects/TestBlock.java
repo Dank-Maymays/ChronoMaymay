@@ -9,7 +9,7 @@ public class TestBlock extends GameObject {
 
 	public TestBlock(float x, float y, float width, float height)
 	{
-		super(x,y,width,height,ObjectID.Grass);
+		super(x,y,width,height,ObjectID.Player);
 		
 	}
 

@@ -22,22 +22,19 @@ public class Player extends GameObject{
 	private Animation current;
 	private int direction = 0;
 	public Player(float x, float y, float width, float height){
-		super(x,y,width,height,ObjectID.Player);
-		idle_front = new Animation("res/idle_front",12);
-		idle_right = new Animation("res/idle_right",12);
-		idle_left = new Animation("res/idle_left",12);
-		walkLeft = new Animation("res/left",24);
-		walkRight = new Animation("res/right",24);
+		super(x,y,width,height,ObjectID.Grass);
+		idle_front = new Animation("res/idle_front",60);
+		idle_right = new Animation("res/idle_right",60);
+		idle_left = new Animation("res/idle_left",60);
+		walkLeft = new Animation("res/left",60);
+		walkRight = new Animation("res/right",60);
 	}
 	
 	public void render(){
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		if(texture == null)
-			Draw.drawQuad(x, y, width, height);
-		else
-			Draw.drawQuad(x, y, width, height,current.getCurrentFrame());
-		glDisable(GL_BLEND);
+		glEnable(GL_BLEND); //ENABLES BLEND FOR TRANSPARENCY
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //SETS THE BLEND FUNCTION TO WORK PROPERLY -- EVERYTHING BETWEEN HERE
+		Draw.drawQuad(x, y, width, height,current.getCurrentFrame()); //Draw the player based on current position and current animation.
+		glDisable(GL_BLEND); // DISABLES BLEND FUNCTION ------------------------------------------------ AND HERE USES TRANSPARENCY.
 	}
 
 	@Override
