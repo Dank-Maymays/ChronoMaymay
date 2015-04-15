@@ -11,6 +11,8 @@ public class Animation {
 	private ArrayList<Texture> frames = new ArrayList<Texture>();
 	private int fps, frame = 0;
 	private Time time = new Time();
+	private boolean finished = false, runOnce = false;
+	private long animationTime;
 
 	public Animation(ArrayList<Texture> frames, int fps)
 	{
@@ -31,17 +33,32 @@ public class Animation {
 				count++;
 			}else
 			{
-				System.out.println("test");
 				break;
 				
 			}
 		} while(true);
+		animationTime = fps * frames.size();
+	}
+	
+	public boolean firstRun()
+	{
+		return runOnce;
+	}
+	
+	public boolean isDone()
+	{
+		return finished;
 	}
 	
 	public void update()
 	{
-
-		if(time.getTime() - time.lastFrame() >= 1000/fps)
+		if(frame > 0 && !runOnce)
+			runOnce = true;
+		System.out.println(runOnce);
+		if(runOnce && frame == 0)
+			finished = true;
+		System.out.println(finished);
+		if(time.getTime() - time.lastFrame() >= 1000/(fps * Game.GAME_TIME.multiplier()))
 		{
 			nextFrame();
 			time.update();

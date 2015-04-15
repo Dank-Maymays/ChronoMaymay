@@ -17,60 +17,46 @@ import org.newdawn.slick.util.ResourceLoader;
 
 public class Draw {
 
-	public static final int WIDTH = 1280, HEIGHT = 720;
+	public static final int WIDTH = 1280, HEIGHT = 720; 												//CONTROLS WIDTH AND HEIGHT OF SCREEN
 	
-	public static void Setup()
+	public static void Setup() 																			//SETS UP THE DISPLAY AND NATIVES
 	{
-		if(System.getProperty("os.name").contains("Windows"))
-			System.setProperty("org.lwjgl.librarypath", new File("natives/windows").getAbsolutePath());
-		else if(System.getProperty("os.name").contains("Mac"))
-			System.setProperty("org.lwjgl.librarypath", new File("natives/macosx").getAbsolutePath());
-		else
+		if(System.getProperty("os.name").contains("Windows")) 											// If the operating system we're on is a windows,
+			System.setProperty("org.lwjgl.librarypath", new File("natives/windows").getAbsolutePath()); // Load the natives for Windows
+		else if(System.getProperty("os.name").contains("Mac")) 											// If the operating system we're on is a mac,
+			System.setProperty("org.lwjgl.librarypath", new File("natives/macosx").getAbsolutePath());  // Load the natives for Mac
+		else // otherwise,
 		{
-			System.out.println("Your OS is not supported");
-			System.exit(0);
+			System.out.println("Your OS is not supported"); 					// Print to console that the OS is not supported.
+			System.exit(0); 													// Close the program.
 		}
 		
-		Display.setTitle("Chrono MayMay");
-		try{
-			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
-			Display.create();
-		} catch(LWJGLException e)
+		Display.setTitle("Chrono MayMay"); 										// Set the title to whatever String is passed in
+		try{ 																	// Try to ...
+			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT)); 				// Set the display dimensions to WIDTH and HEIGHT.
+			Display.create(); 													// Load the display.
+		} catch(LWJGLException e) 												// If something goes wrong,
 		{
-			e.printStackTrace();
+			e.printStackTrace(); 												//Print dat stack.
 		}
 		
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0,WIDTH,HEIGHT,0,1,-1);
-		glMatrixMode(GL_MODELVIEW);
+		glMatrixMode(GL_PROJECTION); 											// Sets the matrix mode to GL_PROJECTION to set up the coordinate system.
+		glLoadIdentity(); 														// Useful if you want your game not to fail.
+		glOrtho(0,WIDTH,HEIGHT,0,1,-1); 										//Sets the far left to 0, the far right to WIDTH, down to HEIGHT, and top to 0. 1 and -1 to make it 2D based.
+		glMatrixMode(GL_MODELVIEW); 											// Sets the matrix mode to GL_MODELVIEW to allow for drawing.
 		
 	}
 	
-	public static void Background()
+	public static void Background() 											// Draws the background
 	{
-		glColor3f(0.3f,0.3f,0.3f);
-		drawQuad(WIDTH/10,HEIGHT/10,WIDTH/10*8,HEIGHT);
-		glColor3d(1,1,1);
+		glColor3f(0.3f,0.3f,0.3f); 												//Set color to grayish.
+		drawQuad(WIDTH/10,HEIGHT/10,WIDTH/10*8,HEIGHT); 						// Sets dimensions depending on window size.
+		glColor3d(1,1,1); 														// Resets the color back to white.
 	}
 	
-	public static Texture quickTexture(String loc){
-		Texture tex = null;
-		
-		InputStream in = ResourceLoader.getResourceAsStream("res/"+loc+".png");
-		try {
-			tex = TextureLoader.getTexture("PNG", in);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return tex;
-
-	}
-	
-	public static void drawQuad(float x, float y, float width, float height)
+	public static void drawQuad(float x, float y, float width, float height) 	//Draws a single color quad
 	{
-		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_TEXTURE_2D); 												//Makes sure texture mode is off to make sure you don't get weird errors.
 		
 		glBegin(GL_QUADS);
 		
@@ -82,13 +68,13 @@ public class Draw {
 		glEnd();
 	}
 	
-	public static void drawQuad(float x, float y, float width, float height, Texture texture)
+	public static void drawQuad(float x, float y, float width, float height, Texture texture) //Draws a quad with a texture binded to it.
 	{		
-		glEnable(GL_TEXTURE_2D);		
-		texture.bind();		
-		glTranslatef(x,y,0);
+		glEnable(GL_TEXTURE_2D); 															  // Makes sure texture mode is on to make sure you can use textures.
+		texture.bind();	  																	  //Binds the texture to be used for drawing.
+		glTranslatef(x,y,0);																  //Sets 0, 0 to x and y, as in the new 0, 0 is at x and y.
 		
-		glBegin(GL_QUADS);
+		glBegin(GL_QUADS); //Draw square with textures
 		
 		glTexCoord2f(0,0);
 		glVertex2f(0,0);
@@ -99,12 +85,12 @@ public class Draw {
 		glTexCoord2f(0,1);
 		glVertex2f(0,height);
 		
-		glEnd();
+		glEnd(); //Stop drawing
 		
-		glLoadIdentity();
+		glLoadIdentity(); //probably useful if you dont want game to crash
 	}
 	
-	public static void drawQuad(float x, float y, float width, float height, float r, float g, float b)
+	public static void drawQuad(float x, float y, float width, float height, float r, float g, float b) //Draws quad with a certain RGB color
 	{
 		glDisable(GL_TEXTURE_2D);
 		
