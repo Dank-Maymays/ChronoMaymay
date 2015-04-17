@@ -1,8 +1,8 @@
 package framework;
 
-import java.awt.Rectangle;
-
+import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.opengl.Texture;
+
 import static framework.Draw.*;
 
 public abstract class GameObject {
@@ -24,9 +24,14 @@ public abstract class GameObject {
 	public abstract void tick();
 	
 	public abstract void render();
-	
-	public abstract void collision();
 
+	public abstract void collision();
+	
+	public Rectangle getHitbox()
+	{
+		return hitbox;
+	}
+	
 	public float getX() {
 		return x;
 	}

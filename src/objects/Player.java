@@ -8,14 +8,14 @@ import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 
-import java.awt.Rectangle;
-
+import org.lwjgl.util.Rectangle;
 import org.lwjgl.input.Keyboard;
 
 import framework.Animation;
 import framework.Draw;
 import framework.Game;
 import framework.GameObject;
+import framework.Handler;
 import framework.ObjectID;
 
 public class Player extends GameObject{
@@ -30,18 +30,18 @@ public class Player extends GameObject{
 	private Animation idle_shoot_left; // IDLE AND SHOOT LEFT ANIMATION
 	private Animation idle_shoot_right; // IDLE AND SHOOT RIGHT ANIMATION
 	private int direction = 0; // DIRECTION OF PLAYER
-	private float gravity = 0.01f;
-	private final float MAX_SPEED = 0.5f;
+	private float gravity = 0.02f;
+	private final float MAX_SPEED = 1f;
 	private boolean shooting = false;
 	private boolean falling = false, jumping = false;
-//	private Rectangle hitbox_left = new Rectangle((int)x,(int)(y+(height*2/10)),(int)width/10,(int)height*4/10);
-//	private Rectangle hitbox_right = new Rectangle();
-//	private Rectangle hitbox_bottom = new Rectangle();
-//	private Rectangle hitbox_top = new Rectangle();
+	private Rectangle hitbox_left = new Rectangle((int)(x+width/3),(int)(y+height/2+height/10),(int)width/40,(int)(height/2 - height/10));
+	private Rectangle hitbox_right = new Rectangle();
+	private Rectangle hitbox_bottom = new Rectangle((int)(x+width/3+width/20),(int)(y+height*19/20+1),(int)(width/3 - width/10),(int)(height/20));
+	private Rectangle hitbox_top = new Rectangle((int)(x+width/3+width/20),(int)(y+height/2+height/10),(int)(width/3 - width/10),(int)(height/20));
 	
 	public Player(float x, float y, float width, float height){
 		super(x,y,width,height,ObjectID.Grass); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player
-		hitbox = new Rectangle((int)x,(int)y,(int)(width*3/10-5),(int)height/2);
+		hitbox = new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10));
 		current = new Animation("res/idle_front",12); /* Loads the sprites from the idle_front folder at 12 fps into current animation -- That way it starts off facing 
 													     front and doesnt waste memory by storing the front animation that does nothing. */
 		idle_right = new Animation("res/idle_right",12); // Loads the the sprites from the idle_right folder into idle_right
@@ -62,11 +62,11 @@ public class Player extends GameObject{
 		
 		if(Game.DEBUG)
 		{
-			Draw.drawQuad(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-//			Draw.drawQuad(hitbox_left.x, hitbox_left.y, hitbox_left.width, hitbox_left.height,1,0,0);
-//			Draw.drawQuad(hitbox_right.x, hitbox_right.y, hitbox_right.width, hitbox_right.height,0,1,0);
-//			Draw.drawQuad(hitbox_top.x, hitbox_top.y, hitbox_top.width, hitbox_top.height,0,0,1);
-//			Draw.drawQuad(hitbox_bottom.x, hitbox_bottom.y, hitbox_bottom.width, hitbox_bottom.height,1,0,1);
+			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
+			Draw.drawQuad(hitbox_left.getX(), hitbox_left.getY(), hitbox_left.getWidth(), hitbox_left.getHeight(),1,0,0);
+			Draw.drawQuad(hitbox_right.getX(), hitbox_right.getY(), hitbox_right.getWidth(), hitbox_right.getHeight(),0,1,0);
+			Draw.drawQuad(hitbox_top.getX(), hitbox_top.getY(), hitbox_top.getWidth(), hitbox_top.getHeight(),0,0,1);
+			Draw.drawQuad(hitbox_bottom.getX(), hitbox_bottom.getY(), hitbox_bottom.getWidth(), hitbox_bottom.getHeight(),1,0,1);
 		}
 			
 	}
@@ -135,20 +135,26 @@ public class Player extends GameObject{
 		if(ySpeed > MAX_SPEED)
 			ySpeed = MAX_SPEED;
 		
-		x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
+	//	x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
 		y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
 		updateHitbox();
 	
 	}
 
-	private void updateHitbox()
+	public void collision()
 	{
-		hitbox.setLocation((int)(x+width*3/10+13), (int)(y+height));
+		for(int i = 0; i < Handler.getObjects().size(); i++)
+		{
+			GameObject tempObj = Handler.getObject(i);
+			if(tempObj.getHitbox().intersects(hitbox))
+				if(tempObj instanceof Platform)
+					System.out.println("hit");
+		}
 	}
 	
-	@Override
-	public void collision() {
-		// TODO runs every tick and checks each collision box to see if we're colliding with anything.
-		
+	private void updateHitbox()
+	{
+		hitbox.setLocation((int)(x+width*3/10+13), (int)(y+height/2+height/10));
 	}
+
 }
