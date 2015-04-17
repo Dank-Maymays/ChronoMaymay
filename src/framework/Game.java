@@ -13,6 +13,7 @@ import org.lwjgl.opengl.Display;
 
 public class Game {
 	
+	public static boolean DEBUG = true;
 	public final static Time GAME_TIME = new Time();
 	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	
