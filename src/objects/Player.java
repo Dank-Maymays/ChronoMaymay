@@ -34,10 +34,11 @@ public class Player extends GameObject{
 	private final float MAX_SPEED = 1f;
 	private boolean shooting = false;
 	private boolean falling = false, jumping = false;
-	private Rectangle hitbox_left = new Rectangle((int)(x+width/3),(int)(y+height/2+height/10),(int)width/40,(int)(height/2 - height/10));
-	private Rectangle hitbox_right = new Rectangle();
-	private Rectangle hitbox_bottom = new Rectangle((int)(x+width/3+width/20),(int)(y+height*19/20+1),(int)(width/3 - width/10),(int)(height/20));
-	private Rectangle hitbox_top = new Rectangle((int)(x+width/3+width/20),(int)(y+height/2+height/10),(int)(width/3 - width/10),(int)(height/20));
+	private Rectangle hitbox_left = new Rectangle((int)(x+width/3+width/40-2),(int)(y+height/2+height/10+5),(int)width/40,(int)(height/2 - height/10-10));
+	private Rectangle hitbox_right = new Rectangle((int)(x+width*2/3-width/20-3),(int)(y+height/2+height/10+5),(int)width/40,(int)(height/2 - height/10-10));
+	private Rectangle hitbox_bottom = new Rectangle((int)(x+width/3+width/25),(int)(y+height*19/20),(int)(width/3 - width/10),(int)(height/20));
+	private Rectangle hitbox_top = new Rectangle((int)(x+width/3+width/25),(int)(y+height/2+height/10),(int)(width/3 - width/10),(int)(height/20));
+	private boolean test = false;
 	
 	public Player(float x, float y, float width, float height){
 		super(x,y,width,height,ObjectID.Grass); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player
@@ -52,6 +53,7 @@ public class Player extends GameObject{
 		shoot_right = new Animation("res/shoot_right",24); // Loads the sprites from the shoot_right folder into shoot_right
 		idle_shoot_left = new Animation("res/idle_shoot_left",24); // Loads the sprites from the idle_shoot_left folder into idle_shoot_left
 		idle_shoot_right = new Animation("res/idle_shoot_right",24); // Loads the sprites from the idle_shoot_right folder into idle_shoot_right
+		
 	}
 	
 	public void render(){
@@ -63,6 +65,9 @@ public class Player extends GameObject{
 		if(Game.DEBUG)
 		{
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
+		}
+		if(test)
+		{
 			Draw.drawQuad(hitbox_left.getX(), hitbox_left.getY(), hitbox_left.getWidth(), hitbox_left.getHeight(),1,0,0);
 			Draw.drawQuad(hitbox_right.getX(), hitbox_right.getY(), hitbox_right.getWidth(), hitbox_right.getHeight(),0,1,0);
 			Draw.drawQuad(hitbox_top.getX(), hitbox_top.getY(), hitbox_top.getWidth(), hitbox_top.getHeight(),0,0,1);
@@ -83,9 +88,9 @@ public class Player extends GameObject{
 			}
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_NUMPAD0))
-			Game.DEBUG = true;
+			test = true;
 		else
-			Game.DEBUG = false;
+			test = false;
 		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) // If the right arrow key is pressed,
 		{
 			if(!shooting)
