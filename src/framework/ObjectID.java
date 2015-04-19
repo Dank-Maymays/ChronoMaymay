@@ -2,7 +2,7 @@ package framework;
 
 public enum ObjectID {
 	
-	Player("sprite_1"), Grass("grass"), Platform("platform");
+	Player("sprite_1"), Grass("grass"), Platform("platform"), Part(null);
 	
 	String texture;
 	

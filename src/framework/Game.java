@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.util.ArrayList;
 
+import objects.Part;
 import objects.Player;
 import objects.TestBlock;
 
@@ -23,6 +24,7 @@ public class Game {
 		//for(int i = 0; i < WIDTH/64; i ++)
 			//for(int j = 0; j < HEIGHT/64;j ++)
 				objects.add(new Player(64,64,256,256));
+				objects.add(new Part(256,256,1));
 		
 		while(!Display.isCloseRequested())
 		{
