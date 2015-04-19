@@ -1,5 +1,6 @@
 package objects;
 
+<<<<<<< HEAD
 import static framework.Game.GAME_TIME;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
@@ -15,12 +16,16 @@ import org.lwjgl.input.Keyboard;
 import framework.Animation;
 import framework.Draw;
 import framework.Game;
+=======
+import framework.Animation;
+>>>>>>> origin/master
 import framework.GameObject;
 import framework.ObjectID;
 
 public class Part extends GameObject{
 	private Animation hover;
 	
+<<<<<<< HEAD
 	public Part(float x, float y, int partNum){
 		super(x,y,50,50,ObjectID.Part);
 		hitbox = new Rectangle((int)x,(int)y,(int)(width*3/10-5),(int)height/2);
@@ -65,6 +70,27 @@ public class Part extends GameObject{
 	
 	public void collision() {
 		// TODO runs every tick and checks each collision box to see if we're colliding with anything.
+=======
+	public Part(float x, float y, float width, float height,int textureID){
+		super(x,y,32,32,ObjectID.Part);
+	}
+
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void render() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void collision() {
+		// TODO Auto-generated method stub
+>>>>>>> origin/master
 		
 	}
 }

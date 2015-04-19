@@ -54,10 +54,8 @@ public class Animation {
 	{
 		if(frame > 0 && !runOnce)
 			runOnce = true;
-		System.out.println(runOnce);
 		if(runOnce && frame == 0)
 			finished = true;
-		System.out.println(finished);
 		if(time.getTime() - time.lastFrame() >= 1000/(fps * Game.GAME_TIME.multiplier()))
 		{
 			nextFrame();

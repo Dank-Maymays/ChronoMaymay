@@ -47,6 +47,17 @@ public class Draw {
 		
 	}
 	
+	public static void startTrans() //WRAPPER FUNCTION TO MAKE LIFE EASIER
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+	
+	public static void endTrans() //WRAPPER FUNCTION TO MAKE LIFE EASIER
+	{
+		glDisable(GL_BLEND);
+	}
+	
 	public static void Background() 											// Draws the background
 	{
 		glColor3f(0.3f,0.3f,0.3f); 												//Set color to grayish.
