@@ -55,7 +55,7 @@ public class PressurePad extends GameObject{
 		}
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_X)){ //press X to test press functionality
-			pressed = !pressed;
+			pressed = !pressed;	//THIS MAKES IT SPAZ BETWEEN THE TWO STATES AND I DON'T KNOW HOW TO FIX IT JUST BTW
 		}
 		
 		x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
