@@ -41,7 +41,7 @@ public class Player extends GameObject{
 	private boolean test = false;
 	
 	public Player(float x, float y, float width, float height){
-		super(x,y,width,height,ObjectID.Grass); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player
+		super(x,y,width,height,ObjectID.Player); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player
 		hitbox = new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10));
 		current = new Animation("res/idle_front",12); /* Loads the sprites from the idle_front folder at 12 fps into current animation -- That way it starts off facing 
 													     front and doesnt waste memory by storing the front animation that does nothing. */
@@ -87,7 +87,7 @@ public class Player extends GameObject{
 				shooting = false;
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_NUMPAD0))
+		if(Keyboard.isKeyDown(Keyboard.KEY_Z))
 			test = true;
 		else
 			test = false;

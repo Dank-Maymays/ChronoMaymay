@@ -9,50 +9,43 @@ import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 
-
-
-
 import org.lwjgl.input.Keyboard;
-
-
 import org.lwjgl.util.Rectangle;
+import org.newdawn.slick.opengl.Texture;
 
-import framework.Animation;
+import static framework.Draw.*;
 import framework.Draw;
 import framework.Game;
-import framework.Animation;
 import framework.GameObject;
 import framework.ObjectID;
 
-public class Part extends GameObject{
-	private Animation hover;
-	private boolean test = false;
+public class PressurePad extends GameObject{
 	
-	public Part(float x, float y, int partNum){
-		super(x,y,50,50,ObjectID.Part);
-		hitbox = new Rectangle((int)(x),(int)(y),(int)(width),(int)(height));
-		hover = new Animation("res/part_"+partNum,6);//animation will choose based on partNum (1-10) in the folders part_1 - part_10
+	private boolean test = false;
+	private boolean pressed = false;
+	
+	public PressurePad(float x, float y){
+		super(x,y,200,200,ObjectID.Pad);
+		hitbox = new Rectangle((int)(x),(int)(y+height*0.81),(int)(width),(int)(height*0.19));
 	}
 	
 	public void render(){
 		glEnable(GL_BLEND); //ENABLES BLEND FOR TRANSPARENCY
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //SETS THE BLEND FUNCTION TO WORK PROPERLY -- EVERYTHING BETWEEN HERE
-		Draw.drawQuad(x, y, width, height,hover.getCurrentFrame()); //Draw the player based on current position and current animation.
+		if (pressed)
+			setTexture(quickLoad(ObjectID.Pad.texture));
+		else
+			setTexture(quickLoad(ObjectID.PressedPad.texture));
+		Draw.drawQuad(x, y, width, height,texture);
 		glDisable(GL_BLEND); // DISABLES BLEND FUNCTION ------------------------------------------------ AND HERE USES TRANSPARENCY.
 		
 		if(Game.DEBUG)
 		{
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
-		}
-		if(test)
-		{
-		}
-			
+		}	
 	}	
 	
 	public void tick() {
-		if(hover!=null) // In case of a loading error we want to make sure that we don't get a null pointer exception by checking first.
-			hover.update(); // Updates the animation so that it goes to the next frame.
 		if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
 			test = true;
 			Game.DEBUG = true;
@@ -60,7 +53,11 @@ public class Part extends GameObject{
 			test = false;	
 			Game.DEBUG = false;
 		}
-
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_X)){ //press X to test press functionality
+			pressed = !pressed;
+		}
+		
 		x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
 		y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
 		updateHitbox();
@@ -69,7 +66,7 @@ public class Part extends GameObject{
 	
 	private void updateHitbox()
 	{
-		hitbox.setLocation((int)(x), (int)(y));
+		hitbox.setLocation((int)(x), (int)(y+height*0.81));
 	}
 	
 	public void collision() {
