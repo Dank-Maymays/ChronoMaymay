@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.newdawn.slick.opengl.Texture;
 
 import static framework.Draw.*;
-
+//import my penis hahaha XD loool
 public class Animation {
 
 	private ArrayList<Texture> frames = new ArrayList<Texture>();
