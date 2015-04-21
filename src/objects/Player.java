@@ -157,7 +157,7 @@ public class Player extends GameObject{
 		}
 	}
 	
-	private void updateHitbox()
+	private void updateHitbox()	//more like update gaybox hahaha trolled
 	{
 		hitbox.setLocation((int)(x+width*3/10+13), (int)(y+height/2+height/10));
 	}
