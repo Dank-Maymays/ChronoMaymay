@@ -18,6 +18,8 @@ import objects.Player;
 
 import objects.PressurePad;
 
+import objects.Door;
+
 import org.lwjgl.opengl.Display;
 
 
@@ -36,11 +38,13 @@ public class Game {
 		objects.add(new Part(256,256,7));
 		objects.add(new Platform(64,300,400,256));
 		objects.add(new PressurePad(400,250));
+		objects.add(new Door(700, 250, 256, 256, 6));
 
 		Handler.getObjects().add(new Player(64,64,256,256));
 		Handler.getObjects().add(new Platform(64,300,400,256));
 		Handler.getObjects().add(new Part(256,256,7));
 		Handler.getObjects().add(new PressurePad(400,150));
+		Handler.getObjects().add(new Door(700, 250, 256, 256, 6));
 		while(!Display.isCloseRequested())
 		{
 			GAME_TIME.update();

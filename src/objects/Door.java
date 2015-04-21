@@ -31,13 +31,13 @@ public class Door extends GameObject{
 	private int state = 0; //0 = CLOSED, 1 = OPENING, 2 = OPEN
 	private boolean test = false;
 	
-	public Door (float x, float y, int numLights){
-		super(x,y,50,50,ObjectID.Door);
-		hitbox = new Rectangle((int)(x),(int)(y),(int)(width),(int)(height));
+	public Door (float x, float y, float width, float height, int numLights){
+		super(x,y,width,height,ObjectID.Door);
+		hitbox = new Rectangle((int)(x+width*0.262),(int)(y+height*.375),(int)(width*0.432),(int)(height*0.628));
 		opening = new Animation("res/doors/"+ numLights + "_light",10);	//chooses numLights based on the parameter passed
-		openDoor = new Animation("res/open_door/"+ numLights + "_light",0);
-		closedDoor = new Animation("res/closed_door/"+ numLights + "_light",0);
-		current = new Animation("res/closed_door/"+ numLights + "_light",0);
+		openDoor = new Animation("res/open_door/"+ numLights + "_light",1);
+		closedDoor = new Animation("res/closed_door/"+ numLights + "_light",1);
+		current = new Animation("res/closed_door/"+ numLights + "_light",1);
 	}
 	
 	public void render(){
@@ -57,13 +57,14 @@ public class Door extends GameObject{
 	}	
 	
 	public void tick() {
-		if(current!=null) // In case of a loading error we want to make sure that we don't get a null pointer exception by checking first.
+		if(current!=null && state == 1) //Only automatically updates frame if door is opening
 			current.update(); // Updates the animation so that it goes to the next frame.
 
 		if(Keyboard.isKeyDown(Keyboard.KEY_Z))
 			test = true;
 		else
 			test = false;
+		//THIS TEST DOESN'T WORK AT ALL PLS HELP
 		if(Keyboard.isKeyDown(Keyboard.KEY_X)) // PRESS X TO TURN ANOTHER LIGHT ON
 		{
 			if (state != 1){ //if door isn't in process of opening
@@ -82,7 +83,7 @@ public class Door extends GameObject{
 	
 	private void updateHitbox()
 	{
-		hitbox.setLocation((int)(x), (int)(y));
+		hitbox.setLocation((int)(x+width*0.262),(int)(y+height*.375));
 	}
 	
 	public void collision() {
