@@ -20,26 +20,26 @@ import framework.ObjectID;
 
 public class Player extends GameObject{
 	
-	private Animation walkLeft; // WALKING LEFT ANIMATION
-	private Animation walkRight; // WALKING RIGHT ANIMATION
-	private Animation idle_left; // IDLE LEFT ANIMATION
-	private Animation idle_right; // IDLE RIGHT ANIMATION
-	private Animation current; // CURRENT ANIMATION -- USED FOR SETTING THE RIGHT ANIMATION
-	private Animation shoot_left; // WALK AND SHOOT LEFT ANIMATION
-	private Animation shoot_right; // WALK AND SHOOT RIGHT ANIMATION
-	private Animation idle_shoot_left; // IDLE AND SHOOT LEFT ANIMATION
-	private Animation idle_shoot_right; // IDLE AND SHOOT RIGHT ANIMATION
-	private int direction = 0; // DIRECTION OF PLAYER
-	private float gravity = 0.02f;
-	private final float MAX_SPEED = 1f;
-	private boolean shooting = false;
-	private boolean falling = false, jumping = false;
-	private Rectangle hitbox_left = new Rectangle((int)(x+width/3+width/40-2),(int)(y+height/2+height/5),(int)width/40,(int)(height/2 - height/5));
-	private Rectangle hitbox_right = new Rectangle((int)(x+width*2/3-width/20-3),(int)(y+height/2+height/10+5),(int)width/40,(int)(height/2 - height/5));
-	private Rectangle hitbox_bottom = new Rectangle((int)(x+width/3+width/25),(int)(y+height*19/20),(int)(width/3 - width/10),(int)(height/20));
-	private Rectangle hitbox_top = new Rectangle((int)(x+width/3+width/25),(int)(y+height/2+height/10),(int)(width/3 - width/10),(int)(height/20));
-	private boolean test = false;
-	private int parts = 0;
+	protected Animation walkLeft; // WALKING LEFT ANIMATION
+	protected Animation walkRight; // WALKING RIGHT ANIMATION
+	protected Animation idle_left; // IDLE LEFT ANIMATION
+	protected Animation idle_right; // IDLE RIGHT ANIMATION
+	protected Animation current; // CURRENT ANIMATION -- USED FOR SETTING THE RIGHT ANIMATION
+	protected Animation shoot_left; // WALK AND SHOOT LEFT ANIMATION
+	protected Animation shoot_right; // WALK AND SHOOT RIGHT ANIMATION
+	protected Animation idle_shoot_left; // IDLE AND SHOOT LEFT ANIMATION
+	protected Animation idle_shoot_right; // IDLE AND SHOOT RIGHT ANIMATION
+	protected int direction = 0; // DIRECTION OF PLAYER
+	protected float gravity = 0.02f;
+	protected final float MAX_SPEED = 1f;
+	protected final float PLAYER_SPEED = 0.3f;
+	protected boolean shooting = false;
+	protected boolean falling = false, jumping = false;
+	protected Rectangle hitbox_left = new Rectangle((int)(x+width/3+width/40-2),(int)(y+height/2+height/5),(int)width/40,(int)(height/2 - height/5));
+	protected Rectangle hitbox_right = new Rectangle((int)(x+width*2/3-width/20-3),(int)(y+height/2+height/10+5),(int)width/40,(int)(height/2 - height/5));
+	protected Rectangle hitbox_bottom = new Rectangle((int)(x+width/3+width/25),(int)(y+height*19/20),(int)(width/3 - width/10),(int)(height/20));
+	protected Rectangle hitbox_top = new Rectangle((int)(x+width/3+width/25),(int)(y+height/2+height/10),(int)(width/3 - width/10),(int)(height/20));
+	protected int parts = 0;
 	
 	public Player(float x, float y, float width, float height){
 		super(x,y,width,height,ObjectID.Player,new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10))); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player		
@@ -65,7 +65,7 @@ public class Player extends GameObject{
 		{
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 		}
-		if(!test)
+		if(true)
 		{
 			Draw.drawQuad(hitbox_left.getX(), hitbox_left.getY(), hitbox_left.getWidth(), hitbox_left.getHeight(),1,0,0);
 			Draw.drawQuad(hitbox_right.getX(), hitbox_right.getY(), hitbox_right.getWidth(), hitbox_right.getHeight(),0,1,0);
@@ -92,7 +92,7 @@ public class Player extends GameObject{
 				current = walkRight; // Set the animation to walkRight.
 			else
 				current = shoot_right;
-			xSpeed = 0.3f; // Set the xSpeed to 0.3f.
+			xSpeed = PLAYER_SPEED; // Set the xSpeed to 0.3f.
 			direction = 1; // Set the direction to 1.
 		}
 		else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) // If the left arrow key is pressed,
@@ -101,7 +101,7 @@ public class Player extends GameObject{
 				current = walkLeft; // Set the animation to walkLeft.
 			else
 				current = shoot_left;
-			xSpeed = -0.3f; // Set the xSpeed to -0.3f.
+			xSpeed = -PLAYER_SPEED; // Set the xSpeed to -0.3f.
 			direction = -1; // Set the direction to -1
 		}
 		else // Otherwise, set the idling animations.
@@ -150,7 +150,7 @@ public class Player extends GameObject{
 		
 	}
 
-	private void collision()
+	protected void collision()
 	{
 		for(int i = 0; i < Handler.getObjects().size(); i++)
 		{
@@ -208,7 +208,7 @@ public class Player extends GameObject{
 		return hitbox_top;
 	}
 
-	private void updateHitbox()
+	protected void updateHitbox()
 	{
 		hitbox.setLocation((int)(x+width*3/10+13), (int)(y+height/2+height/10));
 		hitbox_left.setLocation((int)(x+width/3+width/40-2), (int)(y+height/2+height/20*3));

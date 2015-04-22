@@ -24,6 +24,7 @@ public class Instructions {
 	
 	public void update()
 	{
+		time.update();
 		currentTime += time.Delta();
 	}
 	
