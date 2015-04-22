@@ -37,7 +37,6 @@ public class Game {
 		is.add(new Instruction(0, Action.RIGHT_DOWN));
 		is.add(new Instruction(0, Action.JUMP_DOWN));
 		is.add(new Instruction(1000, Action.RIGHT_UP));
-
 		is.add(new Instruction(10300, Action.JUMP_UP));
 		Instructions iz = new Instructions(is, 5);
 		Handler.getObjects().add(new Clone(iz, 64, 64));
