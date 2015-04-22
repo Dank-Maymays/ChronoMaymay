@@ -26,15 +26,16 @@ import framework.ObjectID;
 
 public class Part extends GameObject{
 	private Animation hover;
-	private boolean test = false;
+	public boolean collected = false;
 	
 	public Part(float x, float y, int partNum){
-		super(x,y,50,50,ObjectID.Part);
-		hitbox = new Rectangle((int)(x),(int)(y),(int)(width),(int)(height));
+		super(x,y,50,50,ObjectID.Part,new Rectangle((int)(x),(int)(y),(int)(50),(int)(50)));
 		hover = new Animation("res/part_"+partNum,6);//animation will choose based on partNum (1-10) in the folders part_1 - part_10
 	}
 	
 	public void render(){
+		if(!collected){
+			
 		glEnable(GL_BLEND); //ENABLES BLEND FOR TRANSPARENCY
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //SETS THE BLEND FUNCTION TO WORK PROPERLY -- EVERYTHING BETWEEN HERE
 		Draw.drawQuad(x, y, width, height,hover.getCurrentFrame()); //Draw the player based on current position and current animation.
@@ -44,27 +45,19 @@ public class Part extends GameObject{
 		{
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 		}
-		if(test)
-		{
 		}
 			
 	}	
 	
 	public void tick() {
-		if(hover!=null) // In case of a loading error we want to make sure that we don't get a null pointer exception by checking first.
-			hover.update(); // Updates the animation so that it goes to the next frame.
-		if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
-			test = true;
-			Game.DEBUG = true;
-		}else{
-			test = false;	
-			Game.DEBUG = false;
+		if(!collected)
+		{
+			if(hover!=null) // In case of a loading error we want to make sure that we don't get a null pointer exception by checking first.
+				hover.update(); // Updates the animation so that it goes to the next frame.
+			x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
+			y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
+			updateHitbox();
 		}
-
-		x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
-		y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
-		updateHitbox();
-	
 	}
 	
 	private void updateHitbox()

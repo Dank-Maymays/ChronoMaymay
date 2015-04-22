@@ -11,10 +11,11 @@ import framework.GameObject;
 import framework.ObjectID;
 
 public class Platform extends GameObject {
-
-	public Platform(float x, float y, float width, float height) {
-		super(x, y, width, height, ObjectID.Platform);
-		hitbox = new Rectangle((int)(x),(int)(y+height/2.45),(int)width,(int)(height/6.1));
+	
+	boolean isMoving;
+	public Platform(float x, float y, float width, float height, boolean move) {
+		super(x, y, width, height, ObjectID.Platform,new Rectangle((int)(x),(int)(y+height/2.45),(int)width,(int)(height/6.1)));
+		isMoving = move;
 	}
 
 	@Override
@@ -31,7 +32,11 @@ public class Platform extends GameObject {
 	
 	}
 
+	public void movePlatform(float d, float e){
 
+		x += d;
+		y += e;
+	}
 	public void collision()
 	{
 		//nothing
@@ -39,6 +44,8 @@ public class Platform extends GameObject {
 	
 	@Override
 	public void render() {
+		if(isMoving)
+			xSpeed = 0.05f;
 		Draw.startTrans();
 		Draw.drawQuad(x, y, width, height,texture);
 		Draw.endTrans();

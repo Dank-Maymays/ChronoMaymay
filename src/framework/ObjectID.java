@@ -2,13 +2,14 @@ package framework;
 
 public enum ObjectID {
 	
-	Player("sprite_1"), Grass("grass"), Platform("platform"), Part(null), Pad("green_button/sprite_1"), 
-			PressedPad("green_button/sprite_2"), Door(null);
+	Player("sprite_1",false), Platform("platform",true), Part(null,false), Pad(null,true), Door(null,false), Block("block",true);
 	
 	public String texture;
+	public boolean walkable;
 	
-	ObjectID(String texture)
+	ObjectID(String texture, boolean walkable)
 	{
 		this.texture = texture;
+		this.walkable = walkable;
 	}
 }

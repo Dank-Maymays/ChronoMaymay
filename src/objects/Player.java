@@ -34,15 +34,15 @@ public class Player extends GameObject{
 	private final float MAX_SPEED = 1f;
 	private boolean shooting = false;
 	private boolean falling = false, jumping = false;
-	private Rectangle hitbox_left = new Rectangle((int)(x+width/3+width/40-2),(int)(y+height/2+height/10+5),(int)width/40,(int)(height/2 - height/10-10));
-	private Rectangle hitbox_right = new Rectangle((int)(x+width*2/3-width/20-3),(int)(y+height/2+height/10+5),(int)width/40,(int)(height/2 - height/10-10));
+	private Rectangle hitbox_left = new Rectangle((int)(x+width/3+width/40-2),(int)(y+height/2+height/5),(int)width/40,(int)(height/2 - height/5));
+	private Rectangle hitbox_right = new Rectangle((int)(x+width*2/3-width/20-3),(int)(y+height/2+height/10+5),(int)width/40,(int)(height/2 - height/5));
 	private Rectangle hitbox_bottom = new Rectangle((int)(x+width/3+width/25),(int)(y+height*19/20),(int)(width/3 - width/10),(int)(height/20));
 	private Rectangle hitbox_top = new Rectangle((int)(x+width/3+width/25),(int)(y+height/2+height/10),(int)(width/3 - width/10),(int)(height/20));
 	private boolean test = false;
+	private int parts = 0;
 	
 	public Player(float x, float y, float width, float height){
-		super(x,y,width,height,ObjectID.Player); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player
-		hitbox = new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10));
+		super(x,y,width,height,ObjectID.Player,new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10))); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player		
 		current = new Animation("res/idle_front",12); /* Loads the sprites from the idle_front folder at 12 fps into current animation -- That way it starts off facing 
 													     front and doesnt waste memory by storing the front animation that does nothing. */
 		idle_right = new Animation("res/idle_right",12); // Loads the the sprites from the idle_right folder into idle_right
@@ -52,8 +52,7 @@ public class Player extends GameObject{
 		shoot_left = new Animation("res/shoot_left",24); // Loads the sprites from the shoot_left folder into shoot_left
 		shoot_right = new Animation("res/shoot_right",24); // Loads the sprites from the shoot_right folder into shoot_right
 		idle_shoot_left = new Animation("res/idle_shoot_left",24); // Loads the sprites from the idle_shoot_left folder into idle_shoot_left
-		idle_shoot_right = new Animation("res/idle_shoot_right",24); // Loads the sprites from the idle_shoot_right folder into idle_shoot_right
-		
+		idle_shoot_right = new Animation("res/idle_shoot_right",24); // RIGHT IDLE
 	}
 	
 	public void render(){
@@ -66,7 +65,7 @@ public class Player extends GameObject{
 		{
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 		}
-		if(test)
+		if(!test)
 		{
 			Draw.drawQuad(hitbox_left.getX(), hitbox_left.getY(), hitbox_left.getWidth(), hitbox_left.getHeight(),1,0,0);
 			Draw.drawQuad(hitbox_right.getX(), hitbox_right.getY(), hitbox_right.getWidth(), hitbox_right.getHeight(),0,1,0);
@@ -87,10 +86,6 @@ public class Player extends GameObject{
 				shooting = false;
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_Z))
-			test = true;
-		else
-			test = false;
 		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) // If the right arrow key is pressed,
 		{
 			if(!shooting)
@@ -129,6 +124,14 @@ public class Player extends GameObject{
 			}
 			xSpeed = 0; // Set the xSpeed to 0.
 		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
+		{
+			if(!falling && !jumping)
+			{
+				jumping = true;
+				ySpeed = -0.6f;
+			}
+		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !shooting)
 		{
 			shooting = true;
@@ -140,26 +143,78 @@ public class Player extends GameObject{
 		if(ySpeed > MAX_SPEED)
 			ySpeed = MAX_SPEED;
 		
-	//	x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
+		x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
 		y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
 		updateHitbox();
-	
+		collision();
+		
 	}
 
-	public void collision()
+	private void collision()
 	{
 		for(int i = 0; i < Handler.getObjects().size(); i++)
 		{
-			GameObject tempObj = Handler.getObject(i);
+			GameObject tempObj = Handler.getObjects().get(i);
+			if(tempObj.getID().walkable)
+			{
+				if(tempObj.getHitbox().intersects(hitbox_bottom))
+				{
+					ySpeed = 0;
+					falling = jumping = false;
+					y = tempObj.getHitbox().getY()-height;
+				}
+				if(tempObj.getHitbox().intersects(hitbox_top))
+				{
+					y = tempObj.getHitbox().getY()+tempObj.getHitbox().getHeight() - (hitbox_top.getY()-hitbox_top.getHeight()-height)+10;
+					ySpeed = 0;
+				}
+//				if(tempObj.getHitbox().intersects(hitbox_right))
+//				{
+//					xSpeed = 0;
+//					x = tempObj.getHitbox().getX()-width;
+//					System.out.println("right");
+//				}
+//				if(tempObj.getHitbox().intersects(hitbox_left))
+//				{
+//					xSpeed = 0;
+//					x = tempObj.getHitbox().getX();
+//					System.out.println("left");
+//				}
+			}
 			if(tempObj.getHitbox().intersects(hitbox))
-				if(tempObj instanceof Platform)
-					System.out.println("hit");
+			{
+				if(tempObj instanceof Part && !((Part) tempObj).collected)
+				{
+					parts++;
+					((Part) tempObj).collected = true;
+				}
+			}
 		}
 	}
 	
-	private void updateHitbox()	//more like update gaybox hahaha trolled
+	public Rectangle getHitbox_left() {
+		return hitbox_left;
+	}
+
+	public Rectangle getHitbox_right() {
+		return hitbox_right;
+	}
+
+	public Rectangle getHitbox_bottom() {
+		return hitbox_bottom;
+	}
+
+	public Rectangle getHitbox_top() {
+		return hitbox_top;
+	}
+
+	private void updateHitbox()
 	{
 		hitbox.setLocation((int)(x+width*3/10+13), (int)(y+height/2+height/10));
+		hitbox_left.setLocation((int)(x+width/3+width/40-2), (int)(y+height/2+height/20*3));
+		hitbox_right.setLocation((int)(x+width*2/3-width/20-3),(int)(y+height/2+height/20*3));
+		hitbox_top.setLocation((int)(x+width/3+width/25),(int)(y+height/2+height/10-5));
+		hitbox_bottom.setLocation((int)(x+width/3+width/25),(int)(y+height*19/20));
 	}
 
 }

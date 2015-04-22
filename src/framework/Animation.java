@@ -13,13 +13,21 @@ public class Animation {
 	private Time time = new Time();
 	private boolean finished = false, runOnce = false;
 	private long animationTime;
-
+	/**
+	 * makes a new animation
+	 * @param frames the frames of the animation
+	 * @param fps the frames per second that the animation runs at
+	 */
 	public Animation(ArrayList<Texture> frames, int fps)
 	{
 		this.frames = frames;
 		this.fps = fps;
 	}
-	
+	/**
+	 * makes animation
+	 * @param path the file path for the png files to make the animation
+	 * @param fps the frames per second that the animation runs at
+	 */
 	public Animation(String path, int fps)
 	{
 		this.fps = fps;

@@ -14,65 +14,78 @@ import org.lwjgl.util.Rectangle;
 import org.newdawn.slick.opengl.Texture;
 
 import static framework.Draw.*;
+import framework.Animation;
 import framework.Draw;
 import framework.Game;
 import framework.GameObject;
+import framework.Handler;
 import framework.ObjectID;
 
 public class PressurePad extends GameObject{
 	
-	private boolean test = false;
 	private boolean pressed = false;
+	private Animation states;
+	private Rectangle hitbox_button;
 	
 	public PressurePad(float x, float y){
-		super(x,y,200,200,ObjectID.Pad);
-		hitbox = new Rectangle((int)(x),(int)(y+height*0.81),(int)(width),(int)(height*0.19));
+		super(x,y,200,200,ObjectID.Pad,new Rectangle((int)(x),(int)(y+200*.9),(int)(200),(int)(200/10)));
+		hitbox_button = new Rectangle((int)(x+200/20-5),(int)(y+200*.81),(int)(200/20*19),(int)(200/10));
+		states = new Animation("res/green_button",1);
 	}
 	
 	public void render(){
 		glEnable(GL_BLEND); //ENABLES BLEND FOR TRANSPARENCY
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //SETS THE BLEND FUNCTION TO WORK PROPERLY -- EVERYTHING BETWEEN HERE
-		if (pressed)
-			setTexture(quickLoad(ObjectID.Pad.texture));
+		if (!pressed)
+			setTexture(states.getFrame(0));
 		else
-			setTexture(quickLoad(ObjectID.PressedPad.texture));
+			setTexture(states.getFrame(1));
 		Draw.drawQuad(x, y, width, height,texture);
 		glDisable(GL_BLEND); // DISABLES BLEND FUNCTION ------------------------------------------------ AND HERE USES TRANSPARENCY.
 		
 		if(Game.DEBUG)
 		{
+			Draw.drawQuad(hitbox_button.getX(), hitbox_button.getY(), hitbox_button.getWidth(), hitbox_button.getHeight());
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 		}	
 	}	
 	
+	public void setPressed(boolean a)
+	{
+		pressed = a;
+	}
+	
+	public boolean getPressed()
+	{
+		return pressed;
+	}
+	
 	public void tick() {
-		if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
-			test = true;
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_Z))
 			Game.DEBUG = true;
-		}else{
-			test = false;	
+		else
 			Game.DEBUG = false;
-		}
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_X)){ //press X to test press pad down
-			pressed = true;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_C)){ //press C to release pressure pad
-			pressed = false;
-		}
-		
 		x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
 		y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
-		updateHitbox();
-	
+		//updateHitbox();
+		collision();
 	}
 	
 	private void updateHitbox()
 	{
 		hitbox.setLocation((int)(x), (int)(y+height*0.81));
 	}
-	
-	public void collision() {
-		// TODO runs every tick and checks each collision box to see if we're colliding with anything.
+	private void collision()
+	{
+		for(int i = 0; i < Handler.getPlayers().size(); i++)
+		{
+			Player p = Handler.getPlayers().get(i);
+			if(p.getHitbox_bottom().intersects(hitbox_button))
+				pressed = true;
+			else
+				pressed = false;
+		}
 	}
+	
 }

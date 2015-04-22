@@ -3,18 +3,18 @@ package framework;
 public class Instruction {
 	//time & command variables
 	private long time;
-	private String command;
+	private Action action;
 	
-	public Instruction(long t, String s){
+	public Instruction(long t, Action a){
 		time = t;
-		command = s;
+		action = a;
 	}
 	
 	public long getTime(){
 		return time;
 	}
 	
-	public String getCommand(){
-		return command;
+	public Action getAction(){
+		return action;
 	}
 }

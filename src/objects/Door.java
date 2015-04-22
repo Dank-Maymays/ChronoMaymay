@@ -32,8 +32,7 @@ public class Door extends GameObject{
 	private boolean test = false;
 	
 	public Door (float x, float y, float width, float height, int numLights){
-		super(x,y,width,height,ObjectID.Door);
-		hitbox = new Rectangle((int)(x+width*0.262),(int)(y+height*.375),(int)(width*0.432),(int)(height*0.628));
+		super(x,y,width,height,ObjectID.Door, new Rectangle((int)(x+width*0.262),(int)(y+height*.375),(int)(width*0.432),(int)(height*0.628)));
 		opening = new Animation("res/doors/"+ numLights + "_light",10);	//chooses numLights based on the parameter passed
 		openDoor = new Animation("res/open_door/"+ numLights + "_light",1);
 		closedDoor = new Animation("res/closed_door/"+ numLights + "_light",1);
