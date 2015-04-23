@@ -122,7 +122,6 @@ public class Draw {
 		try {
 			return TextureLoader.getTexture(type,new FileInputStream(new File(path)));
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
 			return null;
 		} catch (IOException e) {
 			e.printStackTrace();

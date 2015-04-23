@@ -4,12 +4,13 @@ import java.util.ArrayList;
 
 public class Instructions {
 
-	private ArrayList<Instruction> instructions = new ArrayList<Instruction>();
+	private ArrayList<Instruction> cur_instruct = new ArrayList<Instruction>();
 	private Time time;
-	private long totalTime, currentTime = 0;
+	private long currentTime = 0, totalTime = 0;
+	private int index = 0;
 	
 	public Instructions(ArrayList<Instruction> list, long time) {
-		instructions = list;
+		cur_instruct = list;
 		totalTime = time;
 		this.time = new Time();
 	}
@@ -17,9 +18,18 @@ public class Instructions {
 	public ArrayList<Action> getCommands()
 	{
 		ArrayList<Action> commands = new ArrayList<Action>();
-		while(instructions.size() > 0 && currentTime >= instructions.get(0).getTime())
-			commands.add(instructions.remove(0).getAction());
+		while(index < cur_instruct.size() &&currentTime >= cur_instruct.get(index).getTime())
+		{
+			commands.add(cur_instruct.get(index).getAction());
+			index++;
+		}
 		return commands;
+	}
+	
+	public void reset()
+	{
+		index = 0;
+		currentTime = 0;
 	}
 	
 	public void update()
@@ -28,8 +38,14 @@ public class Instructions {
 		currentTime += time.Delta();
 	}
 	
-	public long getTime()
+	public long getTotalTime()
 	{
 		return totalTime;
 	}
+	
+	public long getTime()
+	{
+		return currentTime;
+	}
+	
 }

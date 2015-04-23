@@ -8,15 +8,21 @@ import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
 
-import org.lwjgl.util.Rectangle;
-import org.lwjgl.input.Keyboard;
+import java.util.ArrayList;
 
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.Rectangle;
+
+import framework.Action;
 import framework.Animation;
 import framework.Draw;
 import framework.Game;
 import framework.GameObject;
 import framework.Handler;
+import framework.Instruction;
+import framework.Instructions;
 import framework.ObjectID;
+import framework.Time;
 
 public class Player extends GameObject{
 	
@@ -29,8 +35,15 @@ public class Player extends GameObject{
 	protected Animation shoot_right; // WALK AND SHOOT RIGHT ANIMATION
 	protected Animation idle_shoot_left; // IDLE AND SHOOT LEFT ANIMATION
 	protected Animation idle_shoot_right; // IDLE AND SHOOT RIGHT ANIMATION
+	protected Player clone;
+	protected float start_x;
+	protected float start_y;
+	private boolean recording = false;
+	private boolean left_down;
+	private boolean right_down;
+	private boolean jump_down;
 	protected int direction = 0; // DIRECTION OF PLAYER
-	protected float gravity = 0.02f;
+	protected final float gravity = 0.02f;
 	protected final float MAX_SPEED = 1f;
 	protected final float PLAYER_SPEED = 0.3f;
 	protected boolean shooting = false;
@@ -39,7 +52,11 @@ public class Player extends GameObject{
 	protected Rectangle hitbox_right = new Rectangle((int)(x+width*2/3-width/20-3),(int)(y+height/2+height/10+5),(int)width/40,(int)(height/2 - height/5));
 	protected Rectangle hitbox_bottom = new Rectangle((int)(x+width/3+width/25),(int)(y+height*19/20),(int)(width/3 - width/10),(int)(height/20));
 	protected Rectangle hitbox_top = new Rectangle((int)(x+width/3+width/25),(int)(y+height/2+height/10),(int)(width/3 - width/10),(int)(height/20));
-	protected int parts = 0;
+	protected Instructions is;
+	private ArrayList<Instruction> instructions = new ArrayList<Instruction>();
+	private Time recTime = new Time();
+	private long time = 0;
+	public static int parts = 0;
 	
 	public Player(float x, float y, float width, float height){
 		super(x,y,width,height,ObjectID.Player,new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10))); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player		
@@ -94,8 +111,21 @@ public class Player extends GameObject{
 				current = shoot_right;
 			xSpeed = PLAYER_SPEED; // Set the xSpeed to 0.3f.
 			direction = 1; // Set the direction to 1.
+			
+			if(recording && !right_down)
+			{
+				System.out.printf("RIGHT_DOWN added at %d", time);
+				instructions.add(new Instruction(time,Action.RIGHT_DOWN));
+				right_down = true;
+			}
+		} else if(right_down)
+		{
+
+			System.out.printf("RIGHT_UP added at %d", time);
+			instructions.add(new Instruction(time,Action.RIGHT_UP));
+			right_down = false;
 		}
-		else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) // If the left arrow key is pressed,
+		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) // If the left arrow key is pressed,
 		{
 			if(!shooting)
 				current = walkLeft; // Set the animation to walkLeft.
@@ -103,8 +133,20 @@ public class Player extends GameObject{
 				current = shoot_left;
 			xSpeed = -PLAYER_SPEED; // Set the xSpeed to -0.3f.
 			direction = -1; // Set the direction to -1
+			if(recording && !left_down)
+			{
+				System.out.printf("LEFT_DOWN added at %d", time);
+				instructions.add(new Instruction(time,Action.LEFT_DOWN));
+				left_down = true;
+			}
+				
+		} else if(left_down)
+		{
+			System.out.printf("LEFT_UP added at %d", time);
+			instructions.add(new Instruction(time,Action.LEFT_UP));
+			left_down = false;
 		}
-		else // Otherwise, set the idling animations.
+		if(!Keyboard.isKeyDown(Keyboard.KEY_LEFT) && !Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
 		{
 			switch(direction)
 			{
@@ -130,14 +172,44 @@ public class Player extends GameObject{
 			{
 				jumping = true;
 				ySpeed = -0.6f;
+				if(recording && !jump_down)
+				{
+					System.out.printf("JUMP_DOWN added at %d", time);
+					instructions.add(new Instruction(time,Action.JUMP_DOWN));
+					jump_down = true;
+				}
 			}
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !shooting)
+		} else if(jump_down)
 		{
-			shooting = true;
-			falling = true;
+			System.out.printf("JUMP_UP added at %d", time);
+			instructions.add(new Instruction(time,Action.JUMP_UP));
+			jump_down = false;
 		}
-		
+		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !recording)
+		{
+			recording =  true;
+			clone = new Player(this.x,this.y,256,256);
+			clone.falling = this.falling;
+			clone.jumping = this.jumping;
+			clone.current = this.current;
+			time = 0;
+		}
+		else if(recording && !Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+		{
+			recording = false;
+			Clone c = new Clone(new Instructions((ArrayList<Instruction>) instructions.clone(), time), clone);
+ 			Handler.getObjects().add(c);
+			start_x = 0;
+			start_y = 0;
+			recTime.reset();
+			instructions.clear();
+				
+		}
+		if(recording)
+		{
+			recTime.update();
+			time += recTime.Delta();
+		}
 		if(falling || jumping)
 			ySpeed += gravity;
 		if(ySpeed > MAX_SPEED)

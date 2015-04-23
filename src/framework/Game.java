@@ -30,16 +30,21 @@ public class Game {
 		Setup();
 		//for(int i = 0; i < WIDTH/64; i ++)
 		//for(int j = 0; j < HEIGHT/64;j ++)
-
-		//Player p = new Player(64,64,256,256);
-		//Handler.getPlayers().add(p);
-		ArrayList<Instruction> is = new ArrayList<Instruction>();
-		is.add(new Instruction(0, Action.RIGHT_DOWN));
-		is.add(new Instruction(0, Action.JUMP_DOWN));
-		is.add(new Instruction(1000, Action.RIGHT_UP));
-		is.add(new Instruction(10300, Action.JUMP_UP));
-		Instructions iz = new Instructions(is, 5);
-		Handler.getObjects().add(new Clone(iz, 64, 64));
+		
+		Player p = new Player(64,64,256,256);
+		Handler.getPlayers().add(p);
+		Handler.getObjects().add(p);
+//		ArrayList<Instruction> is = new ArrayList<Instruction>();
+//		is.add(new Instruction(1, Action.JUMP_DOWN));
+//		is.add(new Instruction(2, Action.JUMP_UP));
+//		is.add(new Instruction(1000, Action.RIGHT_DOWN));
+//		is.add(new Instruction(1100, Action.JUMP_DOWN));
+//		is.add(new Instruction(1500,Action.JUMP_DOWN));
+//		is.add(new Instruction(1500,Action.JUMP_UP));
+//		is.add(new Instruction(3000,Action.RIGHT_UP));
+//		is.add(new Instruction(3500,Action.LEFT_DOWN));
+//		is.add(new Instruction(4000,Action.LEFT_UP));
+		//Handler.getObjects().add(new Clone(iz, 64, 64));
 		//Handler.getObjects().add(new Platform(64,300,256,256,false));
 		//Handler.getObjects().add(new Part(128,256,7));
 		//Handler.getObjects().add(new PressurePad(400,150));

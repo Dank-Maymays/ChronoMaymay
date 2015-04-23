@@ -5,7 +5,7 @@ import org.lwjgl.Sys;
 public class Time {
 
 	private boolean paused = false; //Is the time paused.
-	public long lastFrame, totalTime; //lastFrame = time value the last time this was updated. totalTime = the total time.
+	public long lastFrame, totalTime = 0; //lastFrame = time value the last time this was updated. totalTime = the total time.
 	private boolean firstUpdate = true; //Used to see if its the first update, to avoid weird delta errors.
 	public float d = 0, multiplier = 1;//d is the delta, multiplier is the speed multiplier.
 	
@@ -21,9 +21,18 @@ public class Time {
 		return delta; //returns it.
 	}
 	
+	public void reset()
+	{
+		totalTime = 0;
+		lastFrame = 0;
+		firstUpdate = true;
+		d = 0;
+		
+	}
+	
 	public float Delta()
 	{
-		if (paused || firstUpdate || d < 0 || d > 5) //If the game is paused or its the first update (to avoid weird delta errors),
+		if (paused || firstUpdate) //If the game is paused or its the first update (to avoid weird delta errors),
 		{
 			firstUpdate = false; //Set the first update to false.
 			return 0; //Return 0.

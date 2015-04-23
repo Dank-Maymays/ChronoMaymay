@@ -4,28 +4,47 @@ import static framework.Game.GAME_TIME;
 
 import java.util.ArrayList;
 
-import org.lwjgl.input.Keyboard;
-
 import framework.Action;
+import framework.Instruction;
 import framework.Instructions;
 
 public class Clone extends Player{
 
-	Instructions instruct;
-	boolean left=false,right=false,jump=false;
-	ArrayList<Action> actions = new ArrayList<Action>(); 
+	private Instructions instructions;
+	private ArrayList<Action> actions = new ArrayList<Action>(); 
 	
-	public Clone(Instructions list, int x, int y) {
-		super(x,y,256,256);
-		instruct = list;
+	private boolean left = false, right = false, jump = false;
+	
+	public Clone(Instructions list, Player p) {
+		super(p.getX(),p.getY(),256,256);
+		falling = p.falling;
+		jumping = p.jumping;
+		current = p.current;
+		clone = p;
+		instructions = list;
+	}
+	
+	public void loop()
+	{
+		if(instructions.getTime() >= instructions.getTotalTime())
+		{
+			x = clone.getX();
+			y = clone.getY();
+			falling = clone.falling;
+			jumping = clone.jumping;
+			current = clone.current;
+			current = clone.current;
+			instructions.reset();
+		}
 	}
 	
 	public void tick()
 	{
-		actions = instruct.getCommands();
+		loop();
+		actions = instructions.getCommands();
 		for(int i = 0; i < actions.size();i++)
 			parseAction(actions.get(i));
-		instruct.update();
+		instructions.update();
 
 	   ////PLAYER CODE WITH LEFT RIGHT JUMP FLAGS INSTEAD OF OTHER FLAGS
 		
@@ -90,7 +109,7 @@ public class Clone extends Player{
 //			shooting = true;
 //			falling = true;
 //		}
-		
+			
 		if(falling || jumping)
 			ySpeed += gravity;
 		if(ySpeed > MAX_SPEED)
