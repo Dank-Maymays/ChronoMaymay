@@ -202,6 +202,7 @@ public class Player extends GameObject{
 			start_x = 0;
 			start_y = 0;
 			recTime.reset();
+			time = 0;
 			instructions.clear();
 				
 		}
