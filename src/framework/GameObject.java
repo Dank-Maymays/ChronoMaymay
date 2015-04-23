@@ -5,7 +5,7 @@ import org.newdawn.slick.opengl.Texture;
 
 import static framework.Draw.*;
 
-public abstract class GameObject {
+public abstract class GameObject implements GameItem{
 	protected float x,y,xSpeed,ySpeed,width,height;
 	protected Texture texture;
 	protected Rectangle hitbox;

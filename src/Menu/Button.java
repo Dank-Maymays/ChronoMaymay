@@ -24,20 +24,14 @@ public class Button {
 	}
 	
 	public boolean isPressed(){
-		if(Mouse.getX()>=x && Mouse.getX()<=x+width && Mouse.getY()>=y && Mouse.getY()<=y+height)
+		if(Mouse.getX()>=x && Mouse.getX()<=x+width && Mouse.getY()>=y+height/2 && Mouse.getY()<=y+3*height/2)
 			if(Mouse.isButtonDown(0))
 				return true;
 		return false;
 	}
 	
 	public void drawButton(){
-		GL11.glColor3d(1.0,1.0,1.0);
-		GL11.glBegin(GL11.GL_QUADS);
-		    GL11.glVertex2f(x,y);
-		    GL11.glVertex2f(x+width,y);
-		    GL11.glVertex2f(x+width,y+width);
-		    GL11.glVertex2f(x,y+width);
-	    GL11.glEnd();
+		Draw.drawQuad(x, y, width, height);
 
 	}
 }
