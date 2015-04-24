@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import framework.Action;
 import framework.Instruction;
 import framework.Instructions;
+import framework.ObjectID;
 
 public class Clone extends Player{
 
@@ -16,7 +17,7 @@ public class Clone extends Player{
 	private boolean left = false, right = false, jump = false;
 	
 	public Clone(Instructions list, Player p) {
-		super(p.getX(),p.getY(),256,256);
+		super(p.getX(),p.getY(),256,256,ObjectID.Clone);
 		falling = p.falling;
 		jumping = p.jumping;
 		current = p.current;
@@ -30,6 +31,8 @@ public class Clone extends Player{
 		{
 			x = clone.getX();
 			y = clone.getY();
+			xSpeed = clone.getxSpeed();
+			ySpeed = clone.getySpeed();
 			falling = clone.falling;
 			jumping = clone.jumping;
 			current = clone.current;
@@ -98,7 +101,7 @@ public class Clone extends Player{
 		}
 		if(jump)
 		{
-			if(!falling && !jumping)
+			if( !jumping)
 			{
 				jumping = true;
 				ySpeed = -0.6f;

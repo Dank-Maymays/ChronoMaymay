@@ -35,7 +35,7 @@ public class Level {
 				int b = (pixel>>16)&0xFF;
 				int a = (pixel>>24)&0xFF;
 				
-				
+				if(r == 255 && r == 255 && b == 255) //TODO implement image level loader
 			}
 	}
 

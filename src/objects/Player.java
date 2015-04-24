@@ -26,15 +26,15 @@ import framework.Time;
 
 public class Player extends GameObject{
 	
-	protected Animation walkLeft; // WALKING LEFT ANIMATION
-	protected Animation walkRight; // WALKING RIGHT ANIMATION
-	protected Animation idle_left; // IDLE LEFT ANIMATION
-	protected Animation idle_right; // IDLE RIGHT ANIMATION
-	protected Animation current; // CURRENT ANIMATION -- USED FOR SETTING THE RIGHT ANIMATION
-	protected Animation shoot_left; // WALK AND SHOOT LEFT ANIMATION
-	protected Animation shoot_right; // WALK AND SHOOT RIGHT ANIMATION
-	protected Animation idle_shoot_left; // IDLE AND SHOOT LEFT ANIMATION
-	protected Animation idle_shoot_right; // IDLE AND SHOOT RIGHT ANIMATION
+	protected static Animation idle_right = new Animation("res/idle_right",12); // Loads the the sprites from the idle_right folder into idle_right
+	protected static Animation idle_left = new Animation("res/idle_left",12); // Loads the sprites from the idle_left folder into idle_left
+	protected static Animation walkLeft = new Animation("res/left",24); // Loads the sprites from the left folder into left
+	protected static Animation walkRight = new Animation("res/right",24); // Loads the sprites from the right folder into right
+	protected static Animation shoot_left = new Animation("res/shoot_left",24); // Loads the sprites from the shoot_left folder into shoot_left
+	protected static Animation shoot_right = new Animation("res/shoot_right",24); // Loads the sprites from the shoot_right folder into shoot_right
+	protected static Animation idle_shoot_left = new Animation("res/idle_shoot_left",24); // Loads the sprites from the idle_shoot_left folder into idle_shoot_left
+	protected static Animation idle_shoot_right = new Animation("res/idle_shoot_right",24); // RIGHT IDLE
+	protected Animation current;
 	protected Player clone;
 	protected float start_x;
 	protected float start_y;
@@ -60,16 +60,12 @@ public class Player extends GameObject{
 	
 	public Player(float x, float y, float width, float height){
 		super(x,y,width,height,ObjectID.Player,new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10))); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player		
-		current = new Animation("res/idle_front",12); /* Loads the sprites from the idle_front folder at 12 fps into current animation -- That way it starts off facing 
-													     front and doesnt waste memory by storing the front animation that does nothing. */
-		idle_right = new Animation("res/idle_right",12); // Loads the the sprites from the idle_right folder into idle_right
-		idle_left = new Animation("res/idle_left",12); // Loads the sprites from the idle_left folder into idle_left
-		walkLeft = new Animation("res/left",24); // Loads the sprites from the left folder into left
-		walkRight = new Animation("res/right",24); // Loads the sprites from the right folder into right
-		shoot_left = new Animation("res/shoot_left",24); // Loads the sprites from the shoot_left folder into shoot_left
-		shoot_right = new Animation("res/shoot_right",24); // Loads the sprites from the shoot_right folder into shoot_right
-		idle_shoot_left = new Animation("res/idle_shoot_left",24); // Loads the sprites from the idle_shoot_left folder into idle_shoot_left
-		idle_shoot_right = new Animation("res/idle_shoot_right",24); // RIGHT IDLE
+		current = new Animation("res/idle_front",12); // Loads the sprites from the idle_front folder at 12 fps into current animation
+	}
+	
+	public Player(float x, float y, float width, float height, ObjectID id){
+		super(x,y,width,height,id,new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10))); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player		
+		current = new Animation("res/idle_front",12); // Loads the sprites from the idle_front folder at 12 fps into current animation
 	}
 	
 	public void render(){
@@ -168,7 +164,7 @@ public class Player extends GameObject{
 		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
 		{
-			if(!falling && !jumping)
+			if(!jumping)
 			{
 				jumping = true;
 				ySpeed = -0.6f;
@@ -211,7 +207,7 @@ public class Player extends GameObject{
 			recTime.update();
 			time += recTime.Delta();
 		}
-		if(falling || jumping)
+		if(falling || jumping)			
 			ySpeed += gravity;
 		if(ySpeed > MAX_SPEED)
 			ySpeed = MAX_SPEED;
@@ -234,26 +230,40 @@ public class Player extends GameObject{
 				{
 					ySpeed = 0;
 					falling = jumping = false;
-					y = tempObj.getHitbox().getY()-height;
+					y = tempObj.getHitbox().getY()-height+2;
+				} else {
+					falling = true;
 				}
 				if(tempObj.getHitbox().intersects(hitbox_top))
 				{
 					y = tempObj.getHitbox().getY()+tempObj.getHitbox().getHeight() - (hitbox_top.getY()-hitbox_top.getHeight()-height)+10;
 					ySpeed = 0;
 				}
-//				if(tempObj.getHitbox().intersects(hitbox_right))
-//				{
-//					xSpeed = 0;
-//					x = tempObj.getHitbox().getX()-width;
-//					System.out.println("right");
-//				}
-//				if(tempObj.getHitbox().intersects(hitbox_left))
-//				{
-//					xSpeed = 0;
-//					x = tempObj.getHitbox().getX();
-//					System.out.println("left");
-//				}
+				if(tempObj.getHitbox().intersects(hitbox_right))
+				{
+					xSpeed = 0;
+					x = tempObj.getHitbox().getX()-(width*2/3-width/20-3)-hitbox_right.getWidth();
+					System.out.println("right");
+				}
+				if(tempObj.getHitbox().intersects(hitbox_left))
+				{
+					xSpeed = 0;
+					x = tempObj.getHitbox().getX();
+					System.out.println("left");
+				}
+				
 			}
+			if(tempObj.getID() == ObjectID.Clone)
+			{
+				Clone p = (Clone) tempObj;
+				if(p.getHitbox_top().intersects(hitbox_bottom))
+				{
+					ySpeed = 0;
+					falling = jumping = false;
+					y = p.getHitbox_top().getY()-height+2;
+				}
+			}
+			
 			if(tempObj.getHitbox().intersects(hitbox))
 			{
 				if(tempObj instanceof Part && !((Part) tempObj).collected)
