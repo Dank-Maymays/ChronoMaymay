@@ -5,7 +5,7 @@ import org.newdawn.slick.opengl.Texture;
 
 import static framework.Draw.*;
 
-public abstract class GameObject implements GameItem{
+public abstract class GameObject{
 	protected float x,y,xSpeed,ySpeed,width,height;
 	protected Texture texture;
 	protected Rectangle hitbox;
@@ -28,9 +28,13 @@ public abstract class GameObject implements GameItem{
 		this.hitbox = hitbox;
 		texture = quickLoad(id.texture);
 	}
-	
+	/**
+	 * method to regulate the time interval associated with the animations for each GameObject
+	 */
 	public abstract void tick();
-	
+	/**
+	 * method to update and draw the frames for each animation of a GameObject
+	 */
 	public abstract void render();
 	
 	public ObjectID getID()

@@ -47,17 +47,25 @@ public class Animation {
 		} while(true);
 		animationTime = fps * frames.size();
 	}
-	
+	/**
+	 * boolean for if the firstRun has been done
+	 * @return true or false if firstRun has been done
+	 */
 	public boolean firstRun()
 	{
 		return runOnce;
 	}
-	
+	/**
+	 * boolean for if the animation is done
+	 * @return true or false for if the animation is complete
+	 */
 	public boolean isDone()
 	{
 		return finished;
 	}
-	
+	/**
+	 * updates the animation based on the frames and the time corresponding to the fps
+	 */
 	public void update()
 	{
 		if(frame > 0 && !runOnce)
@@ -75,18 +83,25 @@ public class Animation {
 	{
 		return frames.get(frame);
 	}
-	
+	/**
+	 * loops to next frame
+	 */
 	public void nextFrame()
 	{
 		frame++;
 		loopFrame();
 	}
-	
+	/**
+	 * loops to previous frame
+	 */
 	public void lastFrame()
 	{
 		frame--;
 		loopFrame();
 	}
+	/**
+	 * loops frame
+	 */
 	private void loopFrame()
 	{
 		frame %= frames.size();

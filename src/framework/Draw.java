@@ -18,7 +18,9 @@ import org.newdawn.slick.util.ResourceLoader;
 public class Draw {
 
 	public static final int WIDTH = 1280, HEIGHT = 720; 												//CONTROLS WIDTH AND HEIGHT OF SCREEN
-	
+	/**
+	 * sets up the lwjgl java build path and natives for lwjgl.jar
+	 */
 	public static void Setup() 																			//SETS UP THE DISPLAY AND NATIVES
 	{
 		if(System.getProperty("os.name").contains("Windows")) 											// If the operating system we're on is a windows,
@@ -46,25 +48,37 @@ public class Draw {
 		glMatrixMode(GL_MODELVIEW); 											// Sets the matrix mode to GL_MODELVIEW to allow for drawing.
 		
 	}
-	
+	/**
+	 * wrapper for animation, setup
+	 */
 	public static void startTrans() //WRAPPER FUNCTION TO MAKE LIFE EASIER
 	{
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
-	
+	/**
+	 * wrapper for animation, finish
+	 */
 	public static void endTrans() //WRAPPER FUNCTION TO MAKE LIFE EASIER
 	{
 		glDisable(GL_BLEND);
 	}
-	
+	/**
+	 * sets up background
+	 */
 	public static void Background() 											// Draws the background
 	{
 		glColor3f(0.3f,0.3f,0.3f); 												//Set color to grayish.
 		drawQuad(WIDTH/10,HEIGHT/10,WIDTH/10*8,HEIGHT); 						// Sets dimensions depending on window size.
 		glColor3d(1,1,1); 														// Resets the color back to white.
 	}
-	
+	/**
+	 * draws a quad shape at given x and y with the given width and height
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @param width width of quad
+	 * @param height height of quad
+	 */
 	public static void drawQuad(float x, float y, float width, float height) 	//Draws a single color quad
 	{
 		glDisable(GL_TEXTURE_2D); 												//Makes sure texture mode is off to make sure you don't get weird errors.
@@ -78,7 +92,14 @@ public class Draw {
 		
 		glEnd();
 	}
-	
+	/**
+	 * draws a quad shape at given x and y with the given width and height with given texture
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @param width width of quad
+	 * @param height height of quad
+	 * @param texture the texture to be drawn
+	 */
 	public static void drawQuad(float x, float y, float width, float height, Texture texture) //Draws a quad with a texture binded to it.
 	{		
 		glEnable(GL_TEXTURE_2D); 															  // Makes sure texture mode is on to make sure you can use textures.
@@ -100,7 +121,16 @@ public class Draw {
 		
 		glLoadIdentity(); //probably useful if you dont want game to crash
 	}
-	
+	/**
+	 * draws a quad shape at given x and y with the given width and height with given RGB color values
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @param width width of quad
+	 * @param height height of quad
+	 * @param r red color value
+	 * @param g green color value
+	 * @param b blue color value
+	 */
 	public static void drawQuad(float x, float y, float width, float height, float r, float g, float b) //Draws quad with a certain RGB color
 	{
 		glDisable(GL_TEXTURE_2D);
@@ -116,7 +146,12 @@ public class Draw {
 		
 		glEnd();
 	}
-	
+	/**
+	 * loads a texture from the given path
+	 * @param path file path
+	 * @param type extension, mainly .png
+	 * @return the texture loaded
+	 */
 	public static Texture loadTexture(String path, String type) //returns null if texture is not found
 	{
 		try {
@@ -128,7 +163,11 @@ public class Draw {
 		}
 		return null;
 	}
-	
+	/**
+	 * shortcut for the loadTexture method, give it the foldername/filename
+	 * @param name
+	 * @return
+	 */
 	public static Texture quickLoad(String name)
 	{
 		return loadTexture("res/"+name+".png","png");

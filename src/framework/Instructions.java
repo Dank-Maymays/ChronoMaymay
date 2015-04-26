@@ -8,13 +8,20 @@ public class Instructions {
 	private Time time;
 	private long currentTime = 0, totalTime = 0;
 	private int index = 0;
-	
+	/**
+	 * a group of instructions for a clone to follow
+	 * @param list the list of instructions
+	 * @param time the time of the instruction
+	 */
 	public Instructions(ArrayList<Instruction> list, long time) {
 		cur_instruct = list;
 		totalTime = time;
 		this.time = new Time();
 	}
-
+	/**
+	 * gets a list of actions as commands
+	 * @return the list of actions
+	 */
 	public ArrayList<Action> getCommands()
 	{
 		ArrayList<Action> commands = new ArrayList<Action>();
@@ -25,13 +32,17 @@ public class Instructions {
 		}
 		return commands;
 	}
-	
+	/**
+	 * resets the index of the commands and the time to 0
+	 */
 	public void reset()
 	{
 		index = 0;
 		currentTime = 0;
 	}
-	
+	/**
+	 * updates the time for the instructions
+	 */
 	public void update()
 	{
 		time.update();
