@@ -18,6 +18,7 @@ import objects.Door;
 import objects.Laser;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 
 
 public class Game {
@@ -26,6 +27,9 @@ public class Game {
 	public final static Time GAME_TIME = new Time();
 	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	
+	/**
+	 * Creates a game object composed of an ArrayList of objects that are in the game
+	 */
 	public Game()
 	{
 		Setup();
@@ -56,27 +60,42 @@ public class Game {
 			Handler.getObjects().add(new Block(0,i*64));
 			Handler.getObjects().add(new Block(Draw.WIDTH-64,i*64));
 		}			
-		for(int i = 0; i < Draw.WIDTH/64; i++)
+		for(int i = 0; i < Draw.WIDTH/64*20; i++)
 			Handler.getObjects().add(new Block(i*64,Draw.HEIGHT-64));
 		for(int i = 0; i < 3; i++)
 			Handler.getObjects().add(new Block(Draw.WIDTH/2+i*64,Draw.HEIGHT/10*5));
+	//	Handler.loadLevel("res/memes.png");
+		
+		float translate_x = 0, translate_y =0;
+		
 		while(!Display.isCloseRequested())
 		{
+
 			GAME_TIME.update();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+
 			Background();
+			
 //			for(int i = 0; i < Handler.getPlayers().size(); i++)
 //			{
 //				Handler.getPlayers().get(i).tick();
 //				Handler.getPlayers().get(i).render();
 //			}
 			
+
+			
+			translate_x=p.getX();
+			translate_y=p.getY();
+			
 			for(int i = 0; i < Handler.getObjects().size();i++)
 			{
+				GL11.glPushMatrix();
+				GL11.glTranslatef(Draw.WIDTH/3-translate_x, Draw.HEIGHT/3-translate_y, 0);
 				Handler.getObjects().get(i).tick();	//every object in the game does another tick
 				Handler.getObjects().get(i).render();	//every object is rendered
-			}
+				GL11.glPopMatrix();
 
+			}
 			Display.update();
 			Display.sync(60);
 		}

@@ -11,6 +11,7 @@ import static org.lwjgl.opengl.GL11.glEnable;
 import java.util.ArrayList;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
 
 import framework.Action;
@@ -55,21 +56,40 @@ public class Player extends GameObject{
 	protected Rectangle hitbox_bottom = new Rectangle((int)(x+width/3+width/25),(int)(y+height*19/20),(int)(width/3 - width/10),(int)(height/20));
 	protected Rectangle hitbox_top = new Rectangle((int)(x+width/3+width/25),(int)(y+height/2+height/10),(int)(width/3 - width/10),(int)(height/20));
 	protected Instructions is;
+	private int clones = 0;
 	private ArrayList<Instruction> instructions = new ArrayList<Instruction>();
 	private Time recTime = new Time();
 	private long time = 0;
 	public static int parts = 0;
 	
+	/**
+	 * constructs a new player
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public Player(float x, float y, float width, float height){
 		super(x,y,width,height,ObjectID.Player,new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10))); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player		
 		current = new Animation("res/idle_front",12); // Loads the sprites from the idle_front folder at 12 fps into current animation
 	}
 	
+	/**
+	 * constructs a new player
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param id ObjectID to specify if player is a clone
+	 */
 	public Player(float x, float y, float width, float height, ObjectID id){
 		super(x,y,width,height,id,new Rectangle((int)x,(int)(y+height/10),(int)(width*3/10-5),(int)(height/2 - height/10))); // Sends the super class GameObject the x, y, width, height, and the Object ID of Player		
 		current = new Animation("res/idle_front",12); // Loads the sprites from the idle_front folder at 12 fps into current animation
 	}
 	
+	/**
+	 * 
+	 */
 	public void render(){
 		glEnable(GL_BLEND); //ENABLES BLEND FOR TRANSPARENCY
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //SETS THE BLEND FUNCTION TO WORK PROPERLY -- EVERYTHING BETWEEN HERE
@@ -80,13 +100,13 @@ public class Player extends GameObject{
 		{
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 		}
-		if(true)
-		{
-			Draw.drawQuad(hitbox_left.getX(), hitbox_left.getY(), hitbox_left.getWidth(), hitbox_left.getHeight(),1,0,0);
-			Draw.drawQuad(hitbox_right.getX(), hitbox_right.getY(), hitbox_right.getWidth(), hitbox_right.getHeight(),0,1,0);
-			Draw.drawQuad(hitbox_top.getX(), hitbox_top.getY(), hitbox_top.getWidth(), hitbox_top.getHeight(),0,0,1);
-			Draw.drawQuad(hitbox_bottom.getX(), hitbox_bottom.getY(), hitbox_bottom.getWidth(), hitbox_bottom.getHeight(),1,0,1);
-		}
+//		if(true)
+//		{
+//			Draw.drawQuad(hitbox_left.getX(), hitbox_left.getY(), hitbox_left.getWidth(), hitbox_left.getHeight(),1,0,0);
+//			Draw.drawQuad(hitbox_right.getX(), hitbox_right.getY(), hitbox_right.getWidth(), hitbox_right.getHeight(),0,1,0);
+//			Draw.drawQuad(hitbox_top.getX(), hitbox_top.getY(), hitbox_top.getWidth(), hitbox_top.getHeight(),0,0,1);
+//			Draw.drawQuad(hitbox_bottom.getX(), hitbox_bottom.getY(), hitbox_bottom.getWidth(), hitbox_bottom.getHeight(),1,0,1);
+//		}
 
 	}
 
@@ -205,6 +225,7 @@ public class Player extends GameObject{
 				recording = false;
 				Clone c = new Clone(new Instructions((ArrayList<Instruction>) instructions.clone(), time), clone);
 				Handler.getObjects().add(c);
+				if(clones > Handler.)
 				start_x = 0;
 				start_y = 0;
 				recTime.reset();

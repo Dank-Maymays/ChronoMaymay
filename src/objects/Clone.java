@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import framework.Action;
 import framework.Animation;
-import framework.Instruction;
 import framework.Instructions;
 import framework.ObjectID;
 
@@ -56,6 +55,8 @@ public class Clone extends Player{
 		if(current!=null) // In case of a loading error we want to make sure that we don't get a null pointer exception by checking first.
 			current.update(); // Updates the animation so that it goes to the next frame.
 		if(dead){
+			xSpeed = 0;
+			ySpeed = 0;
 			if (current.getCurrentFrame() == current.getFrame(20) || current.getCurrentFrame() == current.getFrame(21)){
 				current = new Animation("res/idle_front", 12);
 				//CLONE GETS DELETED
@@ -127,9 +128,8 @@ public class Clone extends Player{
 				ySpeed += gravity;
 			if(ySpeed > MAX_SPEED)
 				ySpeed = MAX_SPEED;
-
-			x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
-			y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
+				x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
+				y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
 			updateHitbox();
 			collision();
 		}

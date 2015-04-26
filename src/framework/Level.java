@@ -1,22 +1,20 @@
 package framework;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
-import javax.imageio.ImageIO;
+import objects.Block;
+import objects.Part;
 
 public class Level {
 
 	private int parts;
 	private int max_clones;
-	private ArrayList<GameObject> objects = new ArrayList<GameObject>();
+	private LinkedList<GameObject> objects = new LinkedList<GameObject>();
 	
 	public Level(BufferedImage img, int max_clones) {
-		this.parts = parts;
 		this.max_clones = max_clones;
-		
+		int parts = 1;
 		int width = img.getWidth();
 		int height = img.getHeight();
 		int[][] pixels = new int[height][width];
@@ -35,8 +33,21 @@ public class Level {
 				int b = (pixel>>16)&0xFF;
 				int a = (pixel>>24)&0xFF;
 				
-				if(r == 255 && r == 255 && b == 255) //TODO implement image level loader
+				if(r == 0 && g == 0 && b == 0 && a != 0) objects.add(new Block(64*row,64*col)); //TODO implement image level loader
+				if(r == 0 && g == 0 && b == 255 && a == 255) objects.add(new Part(32*row,32*col,parts++));
 			}
+	}
+
+	public int getParts() {
+		return parts;
+	}
+
+	public int getMax_clones() {
+		return max_clones;
+	}
+
+	public LinkedList<GameObject> getObjects() {
+		return objects;
 	}
 
 }
