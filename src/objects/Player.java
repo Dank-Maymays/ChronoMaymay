@@ -258,7 +258,7 @@ public class Player extends GameObject{
 				if(tempObj.getHitbox().intersects(hitbox_left))
 				{
 					xSpeed = 0;
-					x = tempObj.getHitbox().getX();
+					x = (tempObj.getHitbox().getX()-(width/10));
 					System.out.println("left");
 				}
 				
