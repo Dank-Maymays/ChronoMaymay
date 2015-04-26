@@ -225,7 +225,8 @@ public class Player extends GameObject{
 				recording = false;
 				Clone c = new Clone(new Instructions((ArrayList<Instruction>) instructions.clone(), time), clone);
 				Handler.getObjects().add(c);
-				if(clones > Handler.)
+//				if(clones > Handler.getLevel().getMax_clones())
+//					System.out.println("test");
 				start_x = 0;
 				start_y = 0;
 				recTime.reset();

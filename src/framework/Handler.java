@@ -22,6 +22,12 @@ public class Handler {
 	public static LinkedList<Player> getPlayers() {
 		return players;
 	}
+	
+	public static Level getLevel()
+	{
+		return currentLevel;
+	}
+	
 	public static void tick()
 	{
 		for(int i = 0; i < objects.size(); i++)
