@@ -76,6 +76,36 @@ public class Game {
 		
 		while(!Display.isCloseRequested())
 		{
+<<<<<<< HEAD
+
+			GAME_TIME.update();
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
+
+			Background();
+			
+//			for(int i = 0; i < Handler.getPlayers().size(); i++)
+//			{
+//				Handler.getPlayers().get(i).tick();
+//				Handler.getPlayers().get(i).render();
+//			}
+			
+
+			
+			translate_x=p.getX();
+			translate_y=p.getY();
+			
+			for(int i = 0; i < Handler.getObjects().size();i++)
+			{
+				GL11.glPushMatrix();
+				GL11.glTranslatef(Draw.WIDTH/3-translate_x, Draw.HEIGHT/3-translate_y, 0);
+				Handler.getObjects().get(i).tick();	//every object in the game does another tick
+				Handler.getObjects().get(i).render();	//every object is rendered
+				GL11.glPopMatrix();
+
+			}
+			Display.update();
+			Display.sync(60);
+=======
 			if(gameState==0){
 				menu.drawMenu();
 	            Display.update();
@@ -101,6 +131,7 @@ public class Game {
 				Display.update();
 				Display.sync(60);
 			}
+>>>>>>> origin/master
 		}
 		
 		Display.destroy();

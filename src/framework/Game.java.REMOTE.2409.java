@@ -19,7 +19,6 @@ import objects.Door;
 import objects.Laser;
 
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
 
 import Menu.MenuScreen;
 
@@ -32,9 +31,6 @@ public class Game {
 	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	public MenuScreen menu;
 	
-	/**
-	 * Creates a game object composed of an ArrayList of objects that are in the game
-	 */
 	public Game()
 	{
 		Setup();
@@ -66,14 +62,10 @@ public class Game {
 			Handler.getObjects().add(new Block(0,i*64));
 			Handler.getObjects().add(new Block(Draw.WIDTH-64,i*64));
 		}			
-		for(int i = 0; i < Draw.WIDTH/64*20; i++)
+		for(int i = 0; i < Draw.WIDTH/64; i++)
 			Handler.getObjects().add(new Block(i*64,Draw.HEIGHT-64));
 		for(int i = 0; i < 3; i++)
 			Handler.getObjects().add(new Block(Draw.WIDTH/2+i*64,Draw.HEIGHT/10*5));
-	//	Handler.loadLevel("res/memes.png");
-		
-		float translate_x = 0, translate_y =0;
-		
 		while(!Display.isCloseRequested())
 		{
 			if(gameState==0){
