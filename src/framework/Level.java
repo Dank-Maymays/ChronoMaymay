@@ -12,6 +12,12 @@ public class Level {
 	private int max_clones;
 	private LinkedList<GameObject> objects = new LinkedList<GameObject>();
 	
+	public Level(LinkedList<GameObject>objects, int max_clones)
+	{
+		this.objects = (LinkedList<GameObject>) objects.clone();
+		this.max_clones = max_clones;
+	}
+	
 	public Level(BufferedImage img, int max_clones) {
 		this.max_clones = max_clones;
 		int parts = 1;

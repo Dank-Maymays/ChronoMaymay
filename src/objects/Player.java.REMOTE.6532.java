@@ -226,16 +226,11 @@ public class Player extends GameObject{
 				clones++;
 				Clone c = new Clone(new Instructions((ArrayList<Instruction>) instructions.clone(), time), clone, clones);
 				Handler.getObjects().add(c);
-<<<<<<< Updated upstream
-//				if(clones > Handler.getLevel().getMax_clones())
-//					System.out.println("test");
-=======
 				if(clones > Handler.getLevel().getMax_clones())
 				{
 					Handler.removeLastClone();
 					clones--;
 				}
->>>>>>> Stashed changes
 				start_x = 0;
 				start_y = 0;
 				recTime.reset();

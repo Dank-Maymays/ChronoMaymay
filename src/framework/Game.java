@@ -71,7 +71,7 @@ public class Game {
 		for(int i = 0; i < 3; i++)
 			Handler.getObjects().add(new Block(Draw.WIDTH/2+i*64,Draw.HEIGHT/10*5));
 	//	Handler.loadLevel("res/memes.png");
-		
+			Handler.loadLevel(Handler.getObjects(),2);
 		float translate_x = 0, translate_y =0;
 		
 		while(!Display.isCloseRequested())
