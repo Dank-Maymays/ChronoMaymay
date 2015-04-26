@@ -1,5 +1,6 @@
 package Menu;
 
+import static framework.Game.GAME_TIME;
 import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
@@ -20,9 +21,9 @@ public class Button {
 	private Texture button;
 	private String folder;
 	
-	public Button(float x, float y, float w, float h, String f){
-		this.x = x;
-		this.y = y;
+	public Button(float xCoor, float yCoor, float w, float h, String f){
+		x = xCoor;
+		y = yCoor;
 		width = w;
 		height = h;
 		folder = f;
@@ -33,24 +34,21 @@ public class Button {
 		button = Draw.quickLoad(folder+"/sprite_"+i);
 	}
 	public void hover(){
-		System.out.println(x);
-		System.out.println(Mouse.getX());
-		if(Mouse.getX()>=x+70 && Mouse.getX()<=x+170 && Mouse.getY()>=y+100 && Mouse.getY()<=y+200)
+		if(Mouse.getX()>=x && Mouse.getX()<=x+width-50 && Mouse.getY()>=y-165 && Mouse.getY()<=y+height-220)
 			setButton(2);
 		else
 			setButton(1);
 	}
 	public boolean isPressed(){
-		if(Mouse.getX()>=x+70 && Mouse.getX()<=x+width-120 && Mouse.getY()>=y+2*height && Mouse.getY()<=y+2*height+100)
+		if(Mouse.getX()>=x && Mouse.getX()<=x+width-50 && Mouse.getY()>=y-165 && Mouse.getY()<=y+height-220)
 			if(Mouse.isButtonDown(0))
 				return true;
 		return false;
 	}
-	
 	public void drawButton(){
 		glEnable(GL_BLEND); //ENABLES BLEND FOR TRANSPARENCY
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //SETS THE BLEND FUNCTION TO WORK PROPERLY -- EVERYTHING BETWEEN HERE
-		Draw.drawQuad(x, y, width, height,button); //Draw the player based on current position and current animation.
+		Draw.drawQuad(x, 720-y, width, height,button); //Draw the player based on current position and current animation.
 		glDisable(GL_BLEND); // DISABLES BLEND FUNCTION ------------------------------------------------ AND HERE USES TRANSPARENCY.
 		hover();
 	}
