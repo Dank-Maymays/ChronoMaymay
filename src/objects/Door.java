@@ -30,13 +30,15 @@ public class Door extends GameObject{
 	private Animation current;	//contains current animation
 	private int state = 0; //0 = CLOSED, 1 = OPENING, 2 = OPEN
 	private boolean test = false;
+	private int numLights = 0;
 	
 	public Door (float x, float y, float width, float height, int numLights){
 		super(x,y,width,height,ObjectID.Door, new Rectangle((int)(x+width*0.262),(int)(y+height*.375),(int)(width*0.432),(int)(height*0.628)));
 		opening = new Animation("res/doors/"+ numLights + "_light",10);	//chooses numLights based on the parameter passed
 		openDoor = new Animation("res/open_door/"+ numLights + "_light",1);
 		closedDoor = new Animation("res/closed_door/"+ numLights + "_light",1);
-		current = new Animation("res/closed_door/"+ numLights + "_light",1);
+		current = closedDoor;
+		this.numLights = numLights;
 	}
 	
 	public void render(){
@@ -63,20 +65,19 @@ public class Door extends GameObject{
 			test = true;
 		else
 			test = false;
-		//THIS TEST DOESN'T WORK AT ALL PLS HELP
-		if(Keyboard.isKeyDown(Keyboard.KEY_X)) // PRESS X TO TURN ANOTHER LIGHT ON
-		{
-			if (state != 1){ //if door isn't in process of opening
-				current.nextFrame(); //add a light
-				if (current.isDone()){
-					current = opening;
-					state = 1;
-				}
+		
+		
+		if(Keyboard.getEventKey() == Keyboard.KEY_A){ //PRESS A TO TURN ANOTHER LIGHT ON
+			if (state != 1){
+				if(Keyboard.getEventKeyState()){}
+				else
+					current.nextFrame();
 			}
 		}
-		
-		
 		updateHitbox();
+		
+		if (current.getFrame(numLights+1) == current.getCurrentFrame())
+			state = 1;
 	
 	}
 	

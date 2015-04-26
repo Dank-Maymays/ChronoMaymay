@@ -15,6 +15,7 @@ import objects.Platform;
 import objects.Player;
 import objects.PressurePad;
 import objects.Door;
+import objects.Laser;
 
 import org.lwjgl.opengl.Display;
 
@@ -49,6 +50,7 @@ public class Game {
 		//Handler.getObjects().add(new Part(128,256,7));
 		//Handler.getObjects().add(new PressurePad(400,150));
 		//Handler.getObjects().add(new Door(700, 250, 256, 256, 6));
+		Handler.getObjects().add(new Laser(700,500));
 		for(int i = 0; i < Draw.HEIGHT/64; i++)
 		{
 			Handler.getObjects().add(new Block(0,i*64));
@@ -71,8 +73,8 @@ public class Game {
 			
 			for(int i = 0; i < Handler.getObjects().size();i++)
 			{
-				Handler.getObjects().get(i).tick();
-				Handler.getObjects().get(i).render();
+				Handler.getObjects().get(i).tick();	//every object in the game does another tick
+				Handler.getObjects().get(i).render();	//every object is rendered
 			}
 
 			Display.update();

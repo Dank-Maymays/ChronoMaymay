@@ -34,6 +34,7 @@ public class Player extends GameObject{
 	protected static Animation shoot_right = new Animation("res/shoot_right",24); // Loads the sprites from the shoot_right folder into shoot_right
 	protected static Animation idle_shoot_left = new Animation("res/idle_shoot_left",24); // Loads the sprites from the idle_shoot_left folder into idle_shoot_left
 	protected static Animation idle_shoot_right = new Animation("res/idle_shoot_right",24); // RIGHT IDLE
+	protected static Animation laser_death = new Animation("res/laser_death", 24);	//DEATH BY LASER
 	protected Animation current;
 	protected Player clone;
 	protected float start_x;
@@ -48,6 +49,7 @@ public class Player extends GameObject{
 	protected final float PLAYER_SPEED = 0.3f;
 	protected boolean shooting = false;
 	protected boolean falling = false, jumping = false;
+	protected boolean dead = false;		//becomes true if player collides with a laser
 	protected Rectangle hitbox_left = new Rectangle((int)(x+width/3+width/40-2),(int)(y+height/2+height/5),(int)width/40,(int)(height/2 - height/5));
 	protected Rectangle hitbox_right = new Rectangle((int)(x+width*2/3-width/20-3),(int)(y+height/2+height/10+5),(int)width/40,(int)(height/2 - height/5));
 	protected Rectangle hitbox_bottom = new Rectangle((int)(x+width/3+width/25),(int)(y+height*19/20),(int)(width/3 - width/10),(int)(height/20));
@@ -85,67 +87,75 @@ public class Player extends GameObject{
 			Draw.drawQuad(hitbox_top.getX(), hitbox_top.getY(), hitbox_top.getWidth(), hitbox_top.getHeight(),0,0,1);
 			Draw.drawQuad(hitbox_bottom.getX(), hitbox_bottom.getY(), hitbox_bottom.getWidth(), hitbox_bottom.getHeight(),1,0,1);
 		}
-			
+
 	}
-	
+
 	public void tick() {
 		if(current!=null) // In case of a loading error we want to make sure that we don't get a null pointer exception by checking first.
 			current.update(); // Updates the animation so that it goes to the next frame.
-		if(shooting)
-		{
-			if(current.getCurrentFrame() == current.getFrame(0) && current.firstRun())
-			{
-				current.setFrame(0);
-				shooting = false;
+		if(dead){
+			if (current.getCurrentFrame() == current.getFrame(20) || current.getCurrentFrame() == current.getFrame(21)){
+				current = new Animation("res/idle_front", 12);
+				//SOMETHING TO RESET THE LEVEL
+				dead = false;
 			}
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) // If the right arrow key is pressed,
-		{
-			if(!shooting)
-				current = walkRight; // Set the animation to walkRight.
-			else
-				current = shoot_right;
-			xSpeed = PLAYER_SPEED; // Set the xSpeed to 0.3f.
-			direction = 1; // Set the direction to 1.
-			
-			if(recording && !right_down)
+		else{
+			if(shooting)
 			{
-				System.out.printf("RIGHT_DOWN added at %d", time);
-				instructions.add(new Instruction(time,Action.RIGHT_DOWN));
-				right_down = true;
+				if(current.getCurrentFrame() == current.getFrame(0) && current.firstRun())
+				{
+					current.setFrame(0);
+					shooting = false;
+				}
 			}
-		} else if(right_down)
-		{
+			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) // If the right arrow key is pressed,
+			{
+				if(!shooting)
+					current = walkRight; // Set the animation to walkRight.
+				else
+					current = shoot_right;
+				xSpeed = PLAYER_SPEED; // Set the xSpeed to 0.3f.
+				direction = 1; // Set the direction to 1.
 
-			System.out.printf("RIGHT_UP added at %d", time);
-			instructions.add(new Instruction(time,Action.RIGHT_UP));
-			right_down = false;
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) // If the left arrow key is pressed,
-		{
-			if(!shooting)
-				current = walkLeft; // Set the animation to walkLeft.
-			else
-				current = shoot_left;
-			xSpeed = -PLAYER_SPEED; // Set the xSpeed to -0.3f.
-			direction = -1; // Set the direction to -1
-			if(recording && !left_down)
+				if(recording && !right_down)
+				{
+					System.out.printf("RIGHT_DOWN added at %d", time);
+					instructions.add(new Instruction(time,Action.RIGHT_DOWN));
+					right_down = true;
+				}
+			} else if(right_down)
 			{
-				System.out.printf("LEFT_DOWN added at %d", time);
-				instructions.add(new Instruction(time,Action.LEFT_DOWN));
-				left_down = true;
+
+				System.out.printf("RIGHT_UP added at %d", time);
+				instructions.add(new Instruction(time,Action.RIGHT_UP));
+				right_down = false;
 			}
-				
-		} else if(left_down)
-		{
-			System.out.printf("LEFT_UP added at %d", time);
-			instructions.add(new Instruction(time,Action.LEFT_UP));
-			left_down = false;
-		}
-		if(!Keyboard.isKeyDown(Keyboard.KEY_LEFT) && !Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
-		{
-			switch(direction)
+			if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)) // If the left arrow key is pressed,
 			{
+				if(!shooting)
+					current = walkLeft; // Set the animation to walkLeft.
+				else
+					current = shoot_left;
+				xSpeed = -PLAYER_SPEED; // Set the xSpeed to -0.3f.
+				direction = -1; // Set the direction to -1
+				if(recording && !left_down)
+				{
+					System.out.printf("LEFT_DOWN added at %d", time);
+					instructions.add(new Instruction(time,Action.LEFT_DOWN));
+					left_down = true;
+				}
+
+			} else if(left_down)
+			{
+				System.out.printf("LEFT_UP added at %d", time);
+				instructions.add(new Instruction(time,Action.LEFT_UP));
+				left_down = false;
+			}
+			if(!Keyboard.isKeyDown(Keyboard.KEY_LEFT) && !Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
+			{
+				switch(direction)
+				{
 				case -1:
 					if(!shooting)
 						current = idle_left;
@@ -158,65 +168,65 @@ public class Player extends GameObject{
 					else
 						current = idle_shoot_right;
 					break;
-					
-			}
-			xSpeed = 0; // Set the xSpeed to 0.
-		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_UP))
-		{
-			if(!jumping)
-			{
-				jumping = true;
-				ySpeed = -0.6f;
-				if(recording && !jump_down)
-				{
-					System.out.printf("JUMP_DOWN added at %d", time);
-					instructions.add(new Instruction(time,Action.JUMP_DOWN));
-					jump_down = true;
+
 				}
+				xSpeed = 0; // Set the xSpeed to 0.
 			}
-		} else if(jump_down)
-		{
-			System.out.printf("JUMP_UP added at %d", time);
-			instructions.add(new Instruction(time,Action.JUMP_UP));
-			jump_down = false;
+			if(Keyboard.isKeyDown(Keyboard.KEY_UP))
+			{
+				if(!jumping)
+				{
+					jumping = true;
+					ySpeed = -0.6f;
+					if(recording && !jump_down)
+					{
+						System.out.printf("JUMP_DOWN added at %d", time);
+						instructions.add(new Instruction(time,Action.JUMP_DOWN));
+						jump_down = true;
+					}
+				}
+			} else if(jump_down)
+			{
+				System.out.printf("JUMP_UP added at %d", time);
+				instructions.add(new Instruction(time,Action.JUMP_UP));
+				jump_down = false;
+			}
+			if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !recording)
+			{
+				recording =  true;
+				clone = new Player(this.x,this.y,256,256);
+				clone.falling = this.falling;
+				clone.jumping = this.jumping;
+				clone.current = this.current;
+				time = 0;
+			}
+			else if(recording && !Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+			{
+				recording = false;
+				Clone c = new Clone(new Instructions((ArrayList<Instruction>) instructions.clone(), time), clone);
+				Handler.getObjects().add(c);
+				start_x = 0;
+				start_y = 0;
+				recTime.reset();
+				time = 0;
+				instructions.clear();
+
+			}
+			if(recording)
+			{
+				recTime.update();
+				time += recTime.Delta();
+			}
+			if(falling || jumping)			
+				ySpeed += gravity;
+			if(ySpeed > MAX_SPEED)
+				ySpeed = MAX_SPEED;
+
+			x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
+			y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
+			updateHitbox();
+			collision();
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) && !recording)
-		{
-			recording =  true;
-			clone = new Player(this.x,this.y,256,256);
-			clone.falling = this.falling;
-			clone.jumping = this.jumping;
-			clone.current = this.current;
-			time = 0;
-		}
-		else if(recording && !Keyboard.isKeyDown(Keyboard.KEY_SPACE))
-		{
-			recording = false;
-			Clone c = new Clone(new Instructions((ArrayList<Instruction>) instructions.clone(), time), clone);
- 			Handler.getObjects().add(c);
-			start_x = 0;
-			start_y = 0;
-			recTime.reset();
-			time = 0;
-			instructions.clear();
-				
-		}
-		if(recording)
-		{
-			recTime.update();
-			time += recTime.Delta();
-		}
-		if(falling || jumping)			
-			ySpeed += gravity;
-		if(ySpeed > MAX_SPEED)
-			ySpeed = MAX_SPEED;
-		
-		x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
-		y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
-		updateHitbox();
-		collision();
-		
 	}
 
 	protected void collision()
@@ -270,6 +280,12 @@ public class Player extends GameObject{
 				{
 					parts++;
 					((Part) tempObj).collected = true;
+				}
+			}
+			if(tempObj.getID() == ObjectID.Laser && ((Laser)tempObj).getIsOn()){	//collision with laser
+				if(tempObj.getHitbox().intersects(hitbox)){
+					current = laser_death;
+					dead = true;
 				}
 			}
 		}
