@@ -27,7 +27,7 @@ public class MenuScreen {
 	 * sets up the title and buttons to the correct specification
 	 */
 	public MenuScreen(){
-		title = new Animation("res/title",6);//specified animation folder for the title
+		title = new Animation("res/title",20);//specified animation folder for the title
 		play = new Button(520,380,218,218,"play");//x,y,width,height, and folders for the images
 		exit = new Button(530,200,218,218,"exit");
 		x=430;
