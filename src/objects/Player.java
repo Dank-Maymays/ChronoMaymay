@@ -101,7 +101,7 @@ public class Player extends GameObject{
 		{
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && (current.getCurrentFrame().equals(current.getFrame(0)) || current.getCurrentFrame().equals(current.getFrame(8)))){
 			beams.add(new Beam(x,y,50,10,direction));
 		}
 		for(int i = 0; i<beams.size(); i++){
