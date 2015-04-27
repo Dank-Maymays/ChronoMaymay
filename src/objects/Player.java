@@ -61,6 +61,7 @@ public class Player extends GameObject{
 	private Time recTime = new Time();
 	private long time = 0;
 	public static int parts = 0;
+	public ArrayList<Beam> beams = new ArrayList<Beam>();
 	
 	/**
 	 * constructs a new player
@@ -100,6 +101,12 @@ public class Player extends GameObject{
 		{
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
+			beams.add(new Beam(x,y,50,10,direction));
+		}
+		for(int i = 0; i<beams.size(); i++){
+			beams.get(i).render();
+		}
 //		if(true)
 //		{
 //			Draw.drawQuad(hitbox_left.getX(), hitbox_left.getY(), hitbox_left.getWidth(), hitbox_left.getHeight(),1,0,0);
@@ -129,6 +136,9 @@ public class Player extends GameObject{
 					shooting = false;
 				}
 			}
+			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
+				if(!shooting)
+					shooting = true;
 			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) // If the right arrow key is pressed,
 			{
 				if(!shooting)
@@ -226,16 +236,16 @@ public class Player extends GameObject{
 				clones++;
 				Clone c = new Clone(new Instructions((ArrayList<Instruction>) instructions.clone(), time), clone, clones);
 				Handler.getObjects().add(c);
-<<<<<<< Updated upstream
+
 //				if(clones > Handler.getLevel().getMax_clones())
 //					System.out.println("test");
-=======
+
 				if(clones > Handler.getLevel().getMax_clones())
 				{
 					Handler.removeLastClone();
 					clones--;
 				}
->>>>>>> Stashed changes
+
 				start_x = 0;
 				start_y = 0;
 				recTime.reset();
@@ -337,7 +347,13 @@ public class Player extends GameObject{
 	public Rectangle getHitbox_top() {
 		return hitbox_top;
 	}
-
+	public float getX(){
+		return x;
+	}
+	public float getY(){
+		return y;
+	}
+	
 	protected void updateHitbox()
 	{
 		hitbox.setLocation((int)(x+width*3/10+13), (int)(y+height/2+height/10));
@@ -346,5 +362,4 @@ public class Player extends GameObject{
 		hitbox_top.setLocation((int)(x+width/3+width/25),(int)(y+height/2+height/10-5));
 		hitbox_bottom.setLocation((int)(x+width/3+width/25),(int)(y+height*19/20));
 	}
-
 }

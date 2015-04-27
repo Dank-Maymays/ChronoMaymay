@@ -9,6 +9,7 @@ import static org.lwjgl.opengl.GL11.glClear;
 
 import java.util.ArrayList;
 
+import objects.Beam;
 import objects.Block;
 import objects.Clone;
 import objects.Part;
@@ -31,6 +32,7 @@ public class Game {
 	public final static Time GAME_TIME = new Time();
 	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	public MenuScreen menu;
+	public static Player p;
 	
 	/**
 	 * Creates a game object composed of an ArrayList of objects that are in the game
@@ -42,7 +44,7 @@ public class Game {
 		//for(int i = 0; i < WIDTH/64; i ++)
 		//for(int j = 0; j < HEIGHT/64;j ++)
 		
-		Player p = new Player(64,64,256,256);
+		p = new Player(64,64,256,256);
 		Handler.getPlayers().add(p);
 		Handler.getObjects().add(p);
 //		ArrayList<Instruction> is = new ArrayList<Instruction>();
