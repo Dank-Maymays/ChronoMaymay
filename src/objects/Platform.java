@@ -8,34 +8,70 @@ import org.lwjgl.util.Rectangle;
 import framework.Draw;
 import framework.Game;
 import framework.GameObject;
+import framework.Handler;
 import framework.ObjectID;
 
 public class Platform extends GameObject {
 	
-	boolean isMoving;
-	public Platform(float x, float y, float width, float height, boolean move) {
-		super(x, y, width, height, ObjectID.Platform,new Rectangle((int)(x),(int)(y+height/2.45),(int)width,(int)(height/6.1)));
-		isMoving = move;
+	private PressurePad button;
+	private float originalx,originaly;
+	private int plat_id;
+	private int direction;
+	
+	public Platform(float x, float y, int direction, int id) {
+		super(x,y,0,0,ObjectID.Platform,new Rectangle());
+		if(direction == 1)			//horiziontl
+		{
+			width = 256;
+			height = 32;
+			hitbox = new Rectangle((int)x,(int)y,(int)width,(int)height);
+
+		} else if(direction == 0) //vritcal
+		{
+			width = 32;
+			height = 256;
+			hitbox = new Rectangle((int)x,(int)y,(int)width,(int)height);
+		}
+		originalx = x;
+		originaly = y;
+		plat_id = id;
+		this.direction = direction;
 	}
 
+	public int getPlatID()
+	{
+		return plat_id;
+	}
+	
+	public void setButton(PressurePad b)
+	{
+		button = b;
+	}
+	
 	@Override
 	public void tick() {
-		if(Keyboard.isKeyDown(Keyboard.KEY_Z)){
-			Game.DEBUG = true;
-		}else{
-			Game.DEBUG = false;
-		}
+		if(button != null)
+			if(button.getPressed())
+				if(direction == 1)
+					x += -1;
+				else
+					y += 1;
+			else
+				moveTo(originalx,originaly);
 
-		x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
-		y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
 		updateHitbox();
 	
 	}
 
-	public void movePlatform(float d, float e){
+	public void moveTo(float x, float y){
 
-		x += d;
-		y += e;
+		xSpeed = (this.x - x)/Math.abs(this.x - x)*-1;
+		ySpeed = (this.y-y)/Math.abs(this.y - y)*-1;
+		//System.out.println("test");
+		if(this.x != x)
+			this.x += xSpeed;
+		if(this.y != y)
+			this.y += ySpeed;
 	}
 	public void collision()
 	{
@@ -44,19 +80,14 @@ public class Platform extends GameObject {
 	
 	@Override
 	public void render() {
-		if(isMoving)
-			xSpeed = 0.05f;
 		Draw.startTrans();
-		Draw.drawQuad(x, y, width, height,texture);
+		Draw.drawQuad(x, y, width, height);
 		Draw.endTrans();
-		if(Game.DEBUG)
-		{
-			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
-		}
+
 	}
 
 	private void updateHitbox()
 	{
-		hitbox.setLocation((int)(x), (int)(y+height/2.45));
+		hitbox.setLocation((int)(x), (int)(y));
 	}
 }

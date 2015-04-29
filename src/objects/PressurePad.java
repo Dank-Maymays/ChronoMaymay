@@ -26,9 +26,11 @@ public class PressurePad extends GameObject{
 	private boolean pressed = false;
 	private Animation states;
 	private Rectangle hitbox_button;
+	private int pad_id;
 	
-	public PressurePad(float x, float y){
+	public PressurePad(float x, float y,int id){
 		super(x,y,200,200,ObjectID.Pad,new Rectangle((int)(x),(int)(y+200*.9),(int)(200),(int)(200/10)));
+		pad_id = id;
 		hitbox_button = new Rectangle((int)(x+200/20-5),(int)(y+200*.81),(int)(200/20*19),(int)(200/10));
 		states = new Animation("res/green_button",1);
 	}
@@ -50,6 +52,10 @@ public class PressurePad extends GameObject{
 		}	
 	}	
 	
+	public int getPad_id() {
+		return pad_id;
+	}
+
 	public void setPressed(boolean a)
 	{
 		pressed = a;
@@ -61,31 +67,20 @@ public class PressurePad extends GameObject{
 	}
 	
 	public void tick() {
-		
-		if(Keyboard.isKeyDown(Keyboard.KEY_Z))
-			Game.DEBUG = true;
-		else
-			Game.DEBUG = false;
-		x+=xSpeed*GAME_TIME.Delta(); // Add the xSpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
-		y+=ySpeed*GAME_TIME.Delta(); // Add the ySpeed multiplied by the Delta (difference between currentTime and lastFrame used to have smoother animation) each tick.
-		//updateHitbox();
 		collision();
 	}
-	
-	private void updateHitbox()
-	{
-		hitbox.setLocation((int)(x), (int)(y+height*0.81));
-	}
+
 	private void collision()
 	{
-		for(int i = 0; i < Handler.getPlayers().size(); i++)
+		pressed = false;
+		for(int i = 0; i < Handler.getObjects().size(); i++)
 		{
-			Player p = Handler.getPlayers().get(i);
+			if(Handler.getObjects().get(i) instanceof Player){
+				
+			Player p = (Player) Handler.getObjects().get(i);
 			if(p.getHitbox_bottom().intersects(hitbox_button))
 				pressed = true;
-			else
-				pressed = false;
 		}
 	}
-	
+	}
 }
