@@ -14,13 +14,13 @@ public class Clone extends Player{
 	private Instructions instructions;
 	private ArrayList<Action> actions = new ArrayList<Action>(); 
 	
-	public int id;
+	public int clone_id;
 	private boolean left = false, right = false, jump = false;
 	private boolean dead = false;
 	
 	public Clone(Instructions list, Player p, int id) {
 		super(p.getX(),p.getY(),256,256,ObjectID.Clone);
-		this.id = id;
+		clone_id = id;
 		falling = p.falling;
 		jumping = p.jumping;
 		current = p.current;

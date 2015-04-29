@@ -68,7 +68,7 @@ public class Draw {
 	 */
 	public static void Background() 											// Draws the background
 	{
-		glColor3f(0.3f,0.3f,0.3f); 												//Set color to grayish.
+		glColor3f(0f,0f,0f); 												//Set color to black
 		drawQuad(WIDTH/10,HEIGHT/10,WIDTH/10*8,HEIGHT); 						// Sets dimensions depending on window size.
 		glColor3d(1,1,1); 														// Resets the color back to white.
 	}

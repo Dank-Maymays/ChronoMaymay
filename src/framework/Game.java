@@ -9,7 +9,6 @@ import static org.lwjgl.opengl.GL11.glClear;
 
 import java.util.ArrayList;
 
-import objects.Beam;
 import objects.Block;
 import objects.Clone;
 import objects.Part;
@@ -32,7 +31,6 @@ public class Game {
 	public final static Time GAME_TIME = new Time();
 	public static ArrayList<GameObject> objects = new ArrayList<GameObject>();
 	public MenuScreen menu;
-	public static Player p;
 	
 	/**
 	 * Creates a game object composed of an ArrayList of objects that are in the game
@@ -43,10 +41,6 @@ public class Game {
 		menu = new MenuScreen();
 		//for(int i = 0; i < WIDTH/64; i ++)
 		//for(int j = 0; j < HEIGHT/64;j ++)
-		
-		p = new Player(64,64,256,256);
-		Handler.getPlayers().add(p);
-		Handler.getObjects().add(p);
 //		ArrayList<Instruction> is = new ArrayList<Instruction>();
 //		is.add(new Instruction(1, Action.JUMP_DOWN));
 //		is.add(new Instruction(2, Action.JUMP_UP));
@@ -62,22 +56,12 @@ public class Game {
 		//Handler.getObjects().add(new Part(128,256,7));
 		//Handler.getObjects().add(new PressurePad(400,150));
 		//Handler.getObjects().add(new Door(700, 250, 256, 256, 6));
-		Handler.getObjects().add(new Laser(700,500));
-		for(int i = 0; i < Draw.HEIGHT/64; i++)
-		{
-			Handler.getObjects().add(new Block(0,i*64));
-			Handler.getObjects().add(new Block(Draw.WIDTH-64,i*64));
-		}			
-		for(int i = 0; i < Draw.WIDTH/64*20; i++)
-			Handler.getObjects().add(new Block(i*64,Draw.HEIGHT-64));
-		for(int i = 0; i < 3; i++)
-			Handler.getObjects().add(new Block(Draw.WIDTH/2+i*64,Draw.HEIGHT/10*5));
-	//	Handler.loadLevel("res/memes.png");
-			Handler.loadLevel(Handler.getObjects(),2);
-		float translate_x = 0, translate_y =0;
-		
+
+		Handler.loadLevel("res/level_1.png", 1);
+		Handler.linkPlatforms();
 		while(!Display.isCloseRequested())
 		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 			if(gameState==0){
 				menu.drawMenu();
 	            Display.update();
@@ -85,8 +69,8 @@ public class Game {
 				if(menu.getPlay().isPressed())
 					gameState = 1;
 			}else if(gameState==1){
+				
 				GAME_TIME.update();
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 				Background();
 	//			for(int i = 0; i < Handler.getPlayers().size(); i++)
 	//			{
@@ -96,8 +80,11 @@ public class Game {
 				
 				for(int i = 0; i < Handler.getObjects().size();i++)
 				{
+					GL11.glPushMatrix();
+					GL11.glTranslatef(Draw.WIDTH/3-Handler.getPlayer().getX(), Draw.HEIGHT/3-Handler.getPlayer().getY(),0);
 					Handler.getObjects().get(i).tick();	//every object in the game does another tick
 					Handler.getObjects().get(i).render();	//every object is rendered
+					GL11.glPopMatrix();
 				}
 	
 				Display.update();

@@ -10,9 +10,12 @@ import static org.lwjgl.opengl.GL11.glEnable;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.Rectangle;
+import org.newdawn.slick.opengl.Texture;
+import org.lwjgl.input.Mouse;
 
 import framework.Action;
 import framework.Animation;
@@ -101,7 +104,7 @@ public class Player extends GameObject{
 		{
 			Draw.drawQuad(hitbox.getX(), hitbox.getY(), hitbox.getWidth(), hitbox.getHeight());
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && (current.getCurrentFrame().equals(current.getFrame(0)) || current.getCurrentFrame().equals(current.getFrame(8)))){
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
 			beams.add(new Beam(x,y,50,10,direction));
 		}
 		for(int i = 0; i<beams.size(); i++){
@@ -120,17 +123,19 @@ public class Player extends GameObject{
 	public void tick() {
 		if(current!=null) // In case of a loading error we want to make sure that we don't get a null pointer exception by checking first.
 			current.update(); // Updates the animation so that it goes to the next frame.
+		if(Keyboard.isKeyDown(Keyboard.KEY_R))
+			Handler.resetLevel();
 		if(dead){
 			if (current.getCurrentFrame() == current.getFrame(20) || current.getCurrentFrame() == current.getFrame(21)){
 				current = new Animation("res/idle_front", 12);
-				//SOMETHING TO RESET THE LEVEL
+				Handler.resetLevel();
 				dead = false;
 			}
 		}
 		else{
 			if(shooting)
 			{
-				if(current.getCurrentFrame() == current.getFrame(0) && current.firstRun())
+				if(current.getCurrentFrame() == current.getFrame(0) && !current.firstRun())
 				{
 					current.setFrame(0);
 					shooting = false;
@@ -210,14 +215,12 @@ public class Player extends GameObject{
 					ySpeed = -0.6f;
 					if(recording && !jump_down)
 					{
-						System.out.printf("JUMP_DOWN added at %d", time);
 						instructions.add(new Instruction(time,Action.JUMP_DOWN));
 						jump_down = true;
 					}
 				}
 			} else if(jump_down)
 			{
-				System.out.printf("JUMP_UP added at %d", time);
 				instructions.add(new Instruction(time,Action.JUMP_UP));
 				jump_down = false;
 			}
@@ -236,16 +239,11 @@ public class Player extends GameObject{
 				clones++;
 				Clone c = new Clone(new Instructions((ArrayList<Instruction>) instructions.clone(), time), clone, clones);
 				Handler.getObjects().add(c);
-
-//				if(clones > Handler.getLevel().getMax_clones())
-//					System.out.println("test");
-
 				if(clones > Handler.getLevel().getMax_clones())
 				{
 					Handler.removeLastClone();
 					clones--;
 				}
-
 				start_x = 0;
 				start_y = 0;
 				recTime.reset();
@@ -294,13 +292,11 @@ public class Player extends GameObject{
 				{
 					xSpeed = 0;
 					x = tempObj.getHitbox().getX()-(width*2/3-width/20-3)-hitbox_right.getWidth();
-					System.out.println("right");
 				}
 				if(tempObj.getHitbox().intersects(hitbox_left))
 				{
 					xSpeed = 0;
 					x = (tempObj.getHitbox().getX()-(width/10));
-					System.out.println("left");
 				}
 				
 			}
@@ -322,6 +318,16 @@ public class Player extends GameObject{
 					parts++;
 					((Part) tempObj).collected = true;
 				}
+			}
+			if(tempObj.getID() == ObjectID.Door)
+			{
+				Door d = (Door) tempObj;
+				if(d.getDoor() == 0 && d.getState() == 2 && d.getHitbox().intersects(hitbox))
+				{
+					JOptionPane.showMessageDialog(null, "YOU WIN!", "yay", JOptionPane.INFORMATION_MESSAGE);
+					System.exit(0);
+				}
+					
 			}
 			if(tempObj.getID() == ObjectID.Laser && ((Laser)tempObj).getIsOn()){	//collision with laser
 				if(tempObj.getHitbox().intersects(hitbox)){
